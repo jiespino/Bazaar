@@ -14,12 +14,24 @@
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.example.bazaar.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/title_navigation"
         tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_post"
+        android:name="com.example.bazaar.ui.post.PostFragment"
+        android:label="@string/title_post"
+        tools:layout="@layout/fragment_post" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.bazaar.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/navigation_post_information"
+        android:name="com.example.bazaar.ui.postInformation.PostInformationFragment"
+        android:label="@string/title_post_information"
+        tools:layout="@layout/fragment_post_information"/>
 </navigation>
