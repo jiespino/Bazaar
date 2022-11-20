@@ -9,4 +9,9 @@
     <string name="locationHelpText">Enter your location: </string>
     <string name="apartments">Apartments</string>
     <string name="mechanics">Mechanic</string>
+
+    <string name="title_help_text">Title: </string>
+    <string name="description_help_text">Description: </string>
+    <string name="price_help_text">Price per month: </string>
+    <string name="sq_feet_help_text">Square feet: </string>
 </resources>
