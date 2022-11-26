@@ -1,17 +1,27 @@
 <resources>
     <string name="app_name">Bazaar</string>
     <string name="title_home">Home</string>
-    <string name="title_navigation">Navigation</string>
-    <string name="title_post">Post</string>
+    <string name="title_search">Search</string>
+    <string name="title_post">Create a Post</string>
+    <string name="bottom_title_post">Create</string>
     <string name="title_post_information">Post Information</string>
     <string name="title_notifications">Notifications</string>
 
-    <string name="locationHelpText">Enter your location: </string>
+
+    <string name="searchHelpText">Search: </string>
+    <string name="locationHelpText">Enter the location: </string>
     <string name="apartments">Apartments</string>
-    <string name="mechanics">Mechanic</string>
+    <string name="electronics">Electronics</string>
+    <string name="video_games">Video Games</string>
+    <string name="collectible_cards">Collectible Cards</string>
+    <string name="tools">Tools</string>
 
     <string name="title_help_text">Title: </string>
     <string name="description_help_text">Description: </string>
-    <string name="price_help_text">Price per month: </string>
+    <string name="price_apt_help_text">Price per month: </string>
+    <string name="price_help_text">Price: </string>
     <string name="sq_feet_help_text">Square feet: </string>
+
+    <string name="cancel_button_text">Cancel</string>
+    <string name="save_button_text">Save</string>
 </resources>

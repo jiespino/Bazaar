@@ -1,32 +1,31 @@
-package com.example.bazaar.ui.post
+package com.example.bazaar.ui.search
 
 import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import com.example.bazaar.R
-import com.example.bazaar.databinding.FragmentPostBinding
-import com.example.bazaar.ui.postInformation.PostInformationFragment
-import android.location.Geocoder
+import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
+import androidx.lifecycle.ViewModelProvider
+import com.example.bazaar.R
+import com.example.bazaar.databinding.FragmentSearchBinding
 import com.example.bazaar.ui.postInformation.Category
-import com.example.bazaar.ui.postInformation.PostInformationViewModel
-import com.example.bazaar.ui.search.SearchResultsViewModel
 import java.util.*
 
-class PostFragment : Fragment() {
+class SearchFragment: Fragment() {
 
-    private var _binding: FragmentPostBinding? = null
+    private var _binding: FragmentSearchBinding? = null
+    private lateinit var geocoder: Geocoder
+    private val viewModel: SearchResultsViewModel by activityViewModels()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private lateinit var geocoder: Geocoder
-    private val viewModel: PostInformationViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,14 +33,10 @@ class PostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentPostBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val radioGroup = binding.categories
-
-        radioGroup.setOnCheckedChangeListener { radioGroup, i ->
-
-        }
 
         geocoder = Geocoder(this.context, Locale.getDefault())
 
@@ -68,13 +63,13 @@ class PostFragment : Fragment() {
                 val countryCode = location.countryCode
 
                 val usLocation = listOf<String>(city, state, countryCode)
-               // val p1 = LatLng(location.latitude, location.longitude)
 
                 viewModel.setLocation(usLocation.joinToString(","))
                 viewModel.setCategory(getCurrentCategory())
 
+                // val p1 = LatLng(location.latitude, location.longitude)
                 parentFragmentManager.commit {
-                    replace(R.id.nav_host_fragment_activity_main, PostInformationFragment())
+                    replace(R.id.nav_host_fragment_activity_main, SearchResultsFragment())
                     setReorderingAllowed(true)
                     addToBackStack("postInfo")
                 }
@@ -102,5 +97,4 @@ class PostFragment : Fragment() {
             else -> Category.OTHER
         }
     }
-
 }

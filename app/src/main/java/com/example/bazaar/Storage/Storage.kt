@@ -6,6 +6,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.StorageReference
 import java.io.File
+import java.net.URI
 
 // Store files in firebase storage
 class Storage {
@@ -13,12 +14,32 @@ class Storage {
     private val photoStorage: StorageReference =
         FirebaseStorage.getInstance().reference.child("images")
 
-    fun uploadImage(localFile: File, uuid: String, uploadSuccess:()->Unit) {
+    fun uploadUserSelectedMedia(file: Uri, uuid: String, mediaContentType: String, uploadSuccess:()->Unit) {
+
+        val uuidRef = photoStorage.child(uuid)
+        val metadata = StorageMetadata.Builder()
+            .setContentType(mediaContentType)
+            .build()
+        val uploadTask = uuidRef.putFile(file, metadata)
+        //EEE // XXX Write me
+
+        // Register observers to listen for when the download is done or if it fails
+        uploadTask
+            .addOnFailureListener {
+                // Handle unsuccessful uploads
+            }
+            .addOnSuccessListener {
+                // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+                uploadSuccess()
+            }
+    }
+
+    fun uploadMedia(localFile: File, uuid: String, contentType: String, uploadSuccess:()->Unit) {
         //SSS
         val file = Uri.fromFile(localFile)
         val uuidRef = photoStorage.child(uuid)
         val metadata = StorageMetadata.Builder()
-            .setContentType("image/jpg")
+            .setContentType(contentType)
             .build()
         val uploadTask = uuidRef.putFile(file, metadata)
         //EEE // XXX Write me

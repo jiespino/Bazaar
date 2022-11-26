@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.post.PostFragment">
+
     <TextView
         android:id="@+id/location_help_text"
         android:layout_width="wrap_content"
@@ -33,7 +34,7 @@
         android:id="@+id/categories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/location_edit_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,10 +44,22 @@
             android:layout_height="wrap_content"
             android:text="@string/apartments"
             android:checked="true"/>
-        <RadioButton android:id="@+id/radio_mechanic"
+        <RadioButton android:id="@+id/radio_video_games"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/mechanics" />
+            android:text="@string/video_games" />
+        <RadioButton android:id="@+id/radio_electronics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/electronics" />
+        <RadioButton android:id="@+id/radio_tools"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tools" />
+        <RadioButton android:id="@+id/radio_collectible_cards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/collectible_cards" />
     </RadioGroup>
 
     <Button
