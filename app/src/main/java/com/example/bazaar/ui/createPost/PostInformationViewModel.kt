@@ -1,4 +1,4 @@
-package com.example.bazaar.ui.postInformation
+package com.example.bazaar.ui.createPost
 
 import android.net.Uri
 import android.provider.MediaStore

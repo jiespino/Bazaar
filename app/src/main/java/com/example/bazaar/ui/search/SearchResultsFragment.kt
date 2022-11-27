@@ -1,5 +1,6 @@
 package com.example.bazaar.ui.search
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,11 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bazaar.databinding.FragmentSearchResultsBinding
-import com.example.bazaar.ui.postInformation.Category
-import kotlin.coroutines.cancellation.CancellationException
+
 
 class SearchResultsFragment: Fragment() {
 
@@ -32,7 +31,7 @@ class SearchResultsFragment: Fragment() {
 
         viewModel.fetchInitialUserPosts()
 
-        val searchResultsAdapter = SearchResultsAdapter(viewModel)
+        val searchResultsAdapter = SearchResultsAdapter(viewModel, parentFragmentManager)
         binding.searchResultsRV.layoutManager = LinearLayoutManager(context)
         binding.searchResultsRV.adapter = searchResultsAdapter
         viewModel.observeUserPosts().observe(viewLifecycleOwner) {

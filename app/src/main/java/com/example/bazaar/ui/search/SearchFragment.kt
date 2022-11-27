@@ -6,15 +6,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
-import androidx.lifecycle.ViewModelProvider
 import com.example.bazaar.R
 import com.example.bazaar.databinding.FragmentSearchBinding
-import com.example.bazaar.ui.postInformation.Category
+import com.example.bazaar.ui.createPost.Category
 import java.util.*
 
 class SearchFragment: Fragment() {
@@ -69,7 +67,7 @@ class SearchFragment: Fragment() {
 
                 // val p1 = LatLng(location.latitude, location.longitude)
                 parentFragmentManager.commit {
-                    replace(R.id.nav_host_fragment_activity_main, SearchResultsFragment())
+                    replace(R.id.nav_host_fragment_activity_main,  SearchResultsFragment())
                     setReorderingAllowed(true)
                     addToBackStack("postInfo")
                 }

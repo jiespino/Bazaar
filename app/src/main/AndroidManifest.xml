@@ -38,6 +38,12 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity
+            android:name=".ui.search.OnePostImagePager"
+            android:label="One Post Image Pager"
+            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".MainActivity">
+        </activity>
     </application>
 
 </manifest>

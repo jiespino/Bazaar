@@ -1,4 +1,4 @@
-package com.example.bazaar.ui.postInformation
+package com.example.bazaar.ui.createPost
 
 import android.app.Activity
 import android.content.Intent
@@ -10,19 +10,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.bazaar.databinding.FragmentPostInformationBinding
 import java.io.File
 import java.io.IOException
-import java.net.URLConnection
-import java.net.URLEncoder
 import java.util.*
 import androidx.navigation.fragment.findNavController
 import com.example.bazaar.R
@@ -116,7 +112,7 @@ class PostInformationFragment : Fragment() {
         }
 
 
-        mediaAdapter = MediaAdapter(viewModel) { pictureUUIDPosition ->
+        mediaAdapter = MediaAdapter { pictureUUIDPosition ->
             Log.d(javaClass.simpleName, "pictureUUIDs del $pictureUUIDPosition")
             val shorterList = pictureUUIDs.toMutableList()
             shorterList.removeAt(pictureUUIDPosition)

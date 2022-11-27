@@ -19,13 +19,13 @@
 
     <fragment
         android:id="@+id/navigation_post"
-        android:name="com.example.bazaar.ui.post.PostFragment"
+        android:name="com.example.bazaar.ui.createPost.PostFragment"
         android:label="@string/title_post"
-        tools:layout="@layout/fragment_post" />
+        tools:layout="@layout/fragment_post_criteria" />
 
     <fragment
         android:id="@+id/navigation_post_information"
-        android:name="com.example.bazaar.ui.postInformation.PostInformationFragment"
+        android:name="com.example.bazaar.ui.createPost.PostInformationFragment"
         android:label="@string/title_post_information"
         tools:layout="@layout/fragment_post_information"/>
 

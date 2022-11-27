@@ -1,4 +1,4 @@
-package com.example.bazaar.ui.postInformation
+package com.example.bazaar.ui.createPost
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bazaar.R
+import com.example.bazaar.ui.search.SearchResultsViewModel
 
-class MediaAdapter(private val viewModel: PostInformationViewModel,
-                   private val deletePos:((Int)->Unit)? = null) :
+class MediaAdapter(private val deletePos:((Int)->Unit)? = null) :
     ListAdapter<String, MediaAdapter.VH>(Diff()) {
     // This class allows the adapter to compute what has changed
     class Diff : DiffUtil.ItemCallback<String>() {
@@ -26,7 +26,7 @@ class MediaAdapter(private val viewModel: PostInformationViewModel,
         RecyclerView.ViewHolder(view) {
         private var photoIB: ImageButton = view.findViewById(R.id.mediaIB)
         fun bind(pictureUUID: String, position: Int) {
-            viewModel.glideFetch(pictureUUID, photoIB)
+            SearchResultsViewModel.glideFetch(pictureUUID, photoIB)
             if(deletePos == null ) {
                 photoIB.isLongClickable = false
             } else {

@@ -1,4 +1,4 @@
-package com.example.bazaar.ui.postInformation
+package com.example.bazaar.ui.createPost
 
 enum class Category {
     APARTMENT,

@@ -9,6 +9,7 @@ data class UserPost (
     var userName: String = "",
     var title: String = "",
     var description: String = "",
+    var price: Int = 0,
     var ownerUid: String = "",
     var pictureUUIDs: List<String> = listOf(),
     // Written on the server

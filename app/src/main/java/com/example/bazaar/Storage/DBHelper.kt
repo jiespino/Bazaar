@@ -3,9 +3,9 @@ package com.example.bazaar.Storage
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.bazaar.Model.UserPost
-import com.example.bazaar.ui.postInformation.Category
-import com.example.bazaar.ui.postInformation.PostInformationFragment
+import com.example.bazaar.ui.createPost.Category
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 class DBHelper() {
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -28,22 +28,22 @@ class DBHelper() {
     // .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
     // But be careful about how listener updates live data
     // and noteListener?.remove() in onCleared
-    private fun dbFetchUserPosts(location: String, chosenCategory: Category, userPostList: MutableLiveData<List<UserPost>>) {
+    private fun dbFetchUserPosts(location: String, category: Category, userPostList: MutableLiveData<List<UserPost>>) {
         db.collection(collectionRoot)
             .document(location)
-            .collection(chosenCategory.toString())
-            .orderBy("timeStamp")//, Query.Direction.DESCENDING)
+            .collection(category.toString())
+            .orderBy("timeStamp", Query.Direction.DESCENDING)
             .limit(100)
             .get()
             .addOnSuccessListener { result ->
-                Log.d(javaClass.simpleName, "allNotes fetch ${result!!.documents.size}")
+                Log.d(javaClass.simpleName, "all user posts  fetch ${result!!.documents.size}")
                 // NB: This is done on a background thread
                 userPostList.postValue(result.documents.mapNotNull {
                     it.toObject(UserPost::class.java)
                 })
             }
             .addOnFailureListener {
-                Log.d(javaClass.simpleName, "allNotes fetch FAILED ", it)
+                Log.d(javaClass.simpleName, "all user posts fetch FAILED ", it)
             }
     }
 
