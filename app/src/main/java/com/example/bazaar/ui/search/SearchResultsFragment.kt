@@ -1,6 +1,5 @@
 package com.example.bazaar.ui.search
 
-import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.bazaar.R
 import com.example.bazaar.databinding.FragmentSearchResultsBinding
 
 
@@ -29,7 +30,7 @@ class SearchResultsFragment: Fragment() {
 
         _binding = FragmentSearchResultsBinding.inflate(inflater, container, false)
 
-        viewModel.fetchInitialUserPosts()
+        viewModel.fetchInitialCategoryPosts()
 
         val searchResultsAdapter = SearchResultsAdapter(viewModel, parentFragmentManager)
         binding.searchResultsRV.layoutManager = LinearLayoutManager(context)
@@ -39,6 +40,10 @@ class SearchResultsFragment: Fragment() {
             //toggleEmptyNotes()
             searchResultsAdapter.submitList(it)
         }
+
+        //viewModel.observeSingleUserPost().observe(viewLifecycleOwner) {
+            //findNavController().navigate(R.id.one_post_for_search)
+        //}
 
         val root: View = binding.root
         return root

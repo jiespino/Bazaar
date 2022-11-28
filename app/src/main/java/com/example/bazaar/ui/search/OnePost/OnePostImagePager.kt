@@ -1,4 +1,4 @@
-package com.example.bazaar.ui.search
+package com.example.bazaar.ui.search.OnePost
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -16,7 +16,7 @@ class OnePostImagePager : AppCompatActivity() {
         // XXX Write me Set our currentUser variable based on what MainActivity passed us
         val pictureUUIDs = intent.getStringArrayListExtra("pictureUUIDs")
 
-        val viewPagerAdapter = OnePostViewPagerAdapter(this, pictureUUIDs!!)
+        val viewPagerAdapter = OnePostImagePagerAdapter(this, pictureUUIDs!!)
 
         val viewPager = onePostBinding.idViewPager
         viewPager.adapter = viewPagerAdapter

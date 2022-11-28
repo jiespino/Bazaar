@@ -105,7 +105,7 @@ class PostInformationViewModel : ViewModel() {
         pictureUUID = uuid
     }
 
-    fun mediaSuccess(mediaUri: Uri, isImage: Boolean) {
+    fun getMediaSuccess(mediaUri: Uri, isImage: Boolean) {
 
         var contentType = "video/mp4"
         if (isImage) {
@@ -119,7 +119,7 @@ class PostInformationViewModel : ViewModel() {
         }
     }
 
-    fun mediaFailure() {
+    fun getMediaFailure() {
         // Note, the camera intent will only create the file if the user hits accept
         // so I've never seen this called
         pictureUUID = ""

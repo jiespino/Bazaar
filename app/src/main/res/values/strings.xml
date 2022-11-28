@@ -1,10 +1,19 @@
 <resources>
     <string name="app_name">Bazaar</string>
-    <string name="title_home">Home</string>
+
+    <string name="title_my_posts">My Posts</string>
+
+
+
     <string name="title_search">Search</string>
+    <string name="title_search_results">Search Results</string>
+    <string name="title_one_post">One Post</string>
+
     <string name="title_post">Create a Post</string>
     <string name="bottom_title_post">Create</string>
     <string name="title_post_information">Post Information</string>
+
+
     <string name="title_notifications">Notifications</string>
 
 

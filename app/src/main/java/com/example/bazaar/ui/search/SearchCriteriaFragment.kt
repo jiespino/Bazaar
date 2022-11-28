@@ -1,28 +1,30 @@
-package com.example.bazaar.ui.createPost
+package com.example.bazaar.ui.search
 
 import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import com.example.bazaar.R
-import com.example.bazaar.databinding.FragmentPostCriteriaBinding
-import android.location.Geocoder
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
+import androidx.navigation.fragment.findNavController
+import com.example.bazaar.R
+import com.example.bazaar.databinding.FragmentSearchBinding
+import com.example.bazaar.ui.createPost.Category
 import java.util.*
 
-class PostFragment : Fragment() {
+class SearchCriteriaFragment: Fragment() {
 
-    private var _binding: FragmentPostCriteriaBinding? = null
+    private var _binding: FragmentSearchBinding? = null
+    private lateinit var geocoder: Geocoder
+    private val viewModel: SearchResultsViewModel by activityViewModels()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private lateinit var geocoder: Geocoder
-    private val viewModel: PostInformationViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,7 +32,7 @@ class PostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentPostCriteriaBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val radioGroup = binding.categories
@@ -60,16 +62,12 @@ class PostFragment : Fragment() {
                 val countryCode = location.countryCode
 
                 val usLocation = listOf<String>(city, state, countryCode)
-               // val p1 = LatLng(location.latitude, location.longitude)
 
                 viewModel.setLocation(usLocation.joinToString(","))
                 viewModel.setCategory(getCurrentCategory())
 
-                parentFragmentManager.commit {
-                    replace(R.id.nav_host_fragment_activity_main, PostInformationFragment())
-                    setReorderingAllowed(true)
-                    addToBackStack("postInfo")
-                }
+                // val p1 = LatLng(location.latitude, location.longitude)
+                findNavController().navigate(R.id.search_criteria_to_search_results)
             } else {
                 Toast.makeText(activity,
                     "Enter a valid address in the US!",
@@ -94,5 +92,4 @@ class PostFragment : Fragment() {
             else -> Category.OTHER
         }
     }
-
 }

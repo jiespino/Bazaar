@@ -11,6 +11,7 @@ import com.example.bazaar.Storage.DBHelper
 import com.example.bazaar.Storage.Storage
 import com.example.bazaar.glide.Glide
 import com.example.bazaar.ui.createPost.Category
+import com.example.bazaar.ui.search.OnePost.OnePostImagePager
 
 class SearchResultsViewModel : ViewModel() {
     private var userPostsList = MutableLiveData<List<UserPost>>()
@@ -21,8 +22,8 @@ class SearchResultsViewModel : ViewModel() {
     private val dbHelp = DBHelper()
 
     // Notes, memory cache and database interaction
-    fun fetchInitialUserPosts() {
-        dbHelp.fetchInitialUserPosts(currentLocation.value!!, chosenCategory.value!!, userPostsList)
+    fun fetchInitialCategoryPosts() {
+        dbHelp.fetchInitialCategoryPosts(currentLocation.value!!, chosenCategory.value!!, userPostsList)
     }
 
     fun setLocation(location: String) {

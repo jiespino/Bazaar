@@ -3,31 +3,79 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_my_posts">
 
-    <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.bazaar.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+    <navigation
+        android:id="@+id/navigation_my_posts"
+        app:startDestination="@id/my_posts" >
+        <fragment
+            android:id="@+id/my_posts"
+            android:name="com.example.bazaar.ui.myPosts.MyPostsFragment"
+            android:label="@string/title_my_posts"
+            tools:layout="@layout/fragment_my_posts">
+            <action
+                android:id="@+id/my_posts_to_one_post"
+                app:destination="@+id/one_post_for_my_post"
+                />
+        </fragment>
+        <fragment
+            android:id="@+id/one_post_for_my_post"
+            android:name="com.example.bazaar.ui.myPosts.OnePost.OnePostFragment"
+            android:label="@string/title_one_post"
+            tools:layout="@layout/fragment_one_post" />
+    </navigation>
 
-    <fragment
+    <navigation
         android:id="@+id/navigation_search"
-        android:name="com.example.bazaar.ui.search.SearchFragment"
-        android:label="@string/title_search"
-        tools:layout="@layout/fragment_search" />
+        app:startDestination="@id/search" >
+        <fragment
+            android:id="@+id/search"
+            android:name="com.example.bazaar.ui.search.SearchCriteriaFragment"
+            android:label="@string/title_search"
+            tools:layout="@layout/fragment_search" >
+            <action
+                android:id="@+id/search_criteria_to_search_results"
+                app:destination="@+id/search_results"
+                />
+        </fragment>
+        <fragment
+            android:id="@+id/search_results"
+            android:name="com.example.bazaar.ui.search.SearchResultsFragment"
+            android:label="@string/title_search_results"
+            tools:layout="@layout/fragment_search_results" >
+            <action
+                android:id="@+id/search_result_to_one_post"
+                app:destination="@+id/one_post_for_search"
+                />
+        </fragment>
+        <fragment
+            android:id="@+id/one_post_for_search"
+            android:name="com.example.bazaar.ui.search.OnePost.OnePostFragment"
+            android:label="@string/title_one_post"
+            tools:layout="@layout/fragment_one_post"/>
+    </navigation>
 
-    <fragment
-        android:id="@+id/navigation_post"
-        android:name="com.example.bazaar.ui.createPost.PostFragment"
-        android:label="@string/title_post"
-        tools:layout="@layout/fragment_post_criteria" />
 
-    <fragment
-        android:id="@+id/navigation_post_information"
-        android:name="com.example.bazaar.ui.createPost.PostInformationFragment"
-        android:label="@string/title_post_information"
-        tools:layout="@layout/fragment_post_information"/>
+    <navigation
+        android:id="@+id/navigation_create_post"
+        app:startDestination="@id/create_post" >
+        <fragment
+            android:id="@+id/create_post"
+            android:name="com.example.bazaar.ui.createPost.PostCriteriaFragment"
+            android:label="@string/title_post"
+            tools:layout="@layout/fragment_create_post" >
+            <action
+                android:id="@+id/action_post_criteria_to_post_info"
+                app:destination="@+id/navigation_post_information"
+                />
+        </fragment>
+
+        <fragment
+            android:id="@+id/navigation_post_information"
+            android:name="com.example.bazaar.ui.createPost.PostInformationFragment"
+            android:label="@string/title_post_information"
+            tools:layout="@layout/fragment_post_information"/>
+    </navigation>
 
     <fragment
         android:id="@+id/navigation_notifications"

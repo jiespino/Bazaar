@@ -63,10 +63,10 @@ class PostInformationFragment : Fragment() {
                 val mimeType = contextResolver.getType(uri)
                 val isImage = isImageFile(mimeType)
 
-                viewModel.mediaSuccess(uri, isImage)
+                viewModel.getMediaSuccess(uri, isImage)
                 Log.d(javaClass.simpleName, "result ok")
             } else {
-                viewModel.mediaFailure()
+                viewModel.getMediaFailure()
                 Log.w(javaClass.simpleName, "Bad activity return code ${result.resultCode}")
             }
         }

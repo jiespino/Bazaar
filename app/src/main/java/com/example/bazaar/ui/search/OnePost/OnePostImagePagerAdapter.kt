@@ -1,4 +1,4 @@
-package com.example.bazaar.ui.search
+package com.example.bazaar.ui.search.OnePost
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,9 +9,10 @@ import android.widget.RelativeLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.viewpager.widget.PagerAdapter
 import com.example.bazaar.R
+import com.example.bazaar.ui.search.SearchResultsViewModel
 import java.util.*
 
-class OnePostViewPagerAdapter (val context: Context, val imageList: ArrayList<String>) : PagerAdapter() {
+class OnePostImagePagerAdapter (val context: Context, val imageList: ArrayList<String>) : PagerAdapter() {
 
     // on below line we are creating a method
     // as get count to return the size of the list.

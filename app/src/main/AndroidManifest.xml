@@ -39,7 +39,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ui.search.OnePostImagePager"
+            android:name=".ui.search.OnePost.OnePostImagePager"
             android:label="One Post Image Pager"
             android:windowSoftInputMode="adjustResize"
             android:parentActivityName=".MainActivity">

@@ -9,7 +9,9 @@ import com.google.firebase.firestore.Query
 
 class DBHelper() {
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-    private val collectionRoot = "allUserPosts"
+    private val collectionRootAllPosts = "allPosts"
+    private val collectionRootUserPosts = "userPosts"
+    private val collectionRootSingleUserPosts = "SingleUserPosts"
 
     private fun elipsizeString(string: String) : String {
         if(string.length < 10)
@@ -17,8 +19,12 @@ class DBHelper() {
         return string.substring(0..9) + "..."
     }
 
-    fun fetchInitialUserPosts(location: String, chosenCategory: Category, userPostsList: MutableLiveData<List<UserPost>>) {
-        dbFetchUserPosts(location, chosenCategory, userPostsList)
+    fun fetchInitialCategoryPosts(location: String, chosenCategory: Category, postsList: MutableLiveData<List<UserPost>>) {
+        dbFetchCategoryPosts(location, chosenCategory, postsList)
+    }
+
+    fun fetchInitialUserPosts(userUid: String, userPostsList: MutableLiveData<List<UserPost>>) {
+        dbFetchUserPosts(userUid, userPostsList)
     }
     /////////////////////////////////////////////////////////////
     // Interact with Firestore db
@@ -28,10 +34,29 @@ class DBHelper() {
     // .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
     // But be careful about how listener updates live data
     // and noteListener?.remove() in onCleared
-    private fun dbFetchUserPosts(location: String, category: Category, userPostList: MutableLiveData<List<UserPost>>) {
-        db.collection(collectionRoot)
+    private fun dbFetchCategoryPosts(location: String, category: Category, userPostList: MutableLiveData<List<UserPost>>) {
+        db.collection(collectionRootAllPosts)
             .document(location)
             .collection(category.toString())
+            .orderBy("timeStamp", Query.Direction.DESCENDING)
+            .limit(100)
+            .get()
+            .addOnSuccessListener { result ->
+                Log.d(javaClass.simpleName, "all user posts  fetch ${result!!.documents.size}")
+                // NB: This is done on a background thread
+                userPostList.postValue(result.documents.mapNotNull {
+                    it.toObject(UserPost::class.java)
+                })
+            }
+            .addOnFailureListener {
+                Log.d(javaClass.simpleName, "all user posts fetch FAILED ", it)
+            }
+    }
+
+    private fun dbFetchUserPosts(userUid: String, userPostList: MutableLiveData<List<UserPost>>) {
+        db.collection(collectionRootUserPosts)
+            .document(userUid)
+            .collection(collectionRootSingleUserPosts)
             .orderBy("timeStamp", Query.Direction.DESCENDING)
             .limit(100)
             .get()
@@ -55,7 +80,7 @@ class DBHelper() {
     ) {
         val pictureUUIDs = userPost.pictureUUIDs
         //SSS
-        db.collection(collectionRoot)
+        db.collection(collectionRootAllPosts)
             .document(userPost.firestoreID)
             .set(userPost)
             //EEE // XXX Writing a note
@@ -83,18 +108,33 @@ class DBHelper() {
             "XXX",
             "Note CREETE TEST WHAT \"${elipsizeString(userPost.title)}\" id: ${userPost.firestoreID}"
         )
-        db.collection(collectionRoot)
+        db.collection(collectionRootAllPosts)
             .document(location)
             .collection(chosenCategory.toString())
             .add(userPost)
             .addOnSuccessListener {
                 Log.d(
                     "XXX",
-                    "Note create \"${elipsizeString(userPost.title)}\" id: ${userPost.firestoreID}"
+                    "category post create \"${elipsizeString(userPost.title)}\" id: ${userPost.firestoreID}"
                 )
             }
             .addOnFailureListener { e ->
-                Log.d("XXX", "Note create FAILED \"${elipsizeString(userPost.title)}\"")
+                Log.d("XXX", "category post FAILED \"${elipsizeString(userPost.title)}\"")
+                Log.d("XXX", "Error ", e)
+            }
+
+        db.collection(collectionRootUserPosts)
+            .document(userPost.ownerUid)
+            .collection(collectionRootSingleUserPosts)
+            .add(userPost)
+            .addOnSuccessListener {
+                Log.d(
+                    "XXX",
+                    "Single post create \"${elipsizeString(userPost.title)}\" id: ${userPost.firestoreID}"
+                )
+            }
+            .addOnFailureListener { e ->
+                Log.d("XXX", "Single post create FAILED \"${elipsizeString(userPost.title)}\"")
                 Log.d("XXX", "Error ", e)
             }
     }
@@ -103,7 +143,7 @@ class DBHelper() {
         userPost: UserPost,
         userPostsList: MutableLiveData<List<UserPost>>
     ) {
-        db.collection(collectionRoot)
+        db.collection(collectionRootAllPosts)
             .document(userPost.firestoreID)
             .delete()
             .addOnSuccessListener {
