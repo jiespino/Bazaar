@@ -27,27 +27,19 @@ class OnePostFragment: Fragment() {
     ): View {
         _binding = FragmentOnePostBinding.inflate(inflater, container, false)
 
-        val currUserPost = viewModel.observeSingleUserPost().value
-        val pictureUUIDs = currUserPost?.pictureUUIDs
+        val currUserPost = viewModel.getCurrentUserPost()
+        val pictureUUIDs = currUserPost.pictureUUIDs
 
-        binding.titleText.text = currUserPost?.title
-        binding.descriptionText.text = currUserPost?.description
-        binding.priceText.text = currUserPost?.price.toString()
+        binding.titleText.text = currUserPost.title
+        binding.descriptionText.text = currUserPost.description
+        binding.priceText.text = currUserPost.price.toString()
 
-        mediaAdapterOnePost = OnePostMediaAdapter()
+        mediaAdapterOnePost = OnePostMediaAdapter(viewModel)
 
         binding.mediaRV.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         binding.mediaRV.adapter = mediaAdapterOnePost
         mediaAdapterOnePost.submitList(pictureUUIDs)
-
-        binding.mediaRV.setOnClickListener {
-            SearchResultsViewModel.doOnePostImages(binding.root.context, currUserPost!!)
-        }
-
-        binding.titleText.setOnClickListener {
-            SearchResultsViewModel.doOnePostImages(binding.root.context, currUserPost!!)
-        }
 
         val root: View = binding.root
         return root

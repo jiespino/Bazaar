@@ -35,19 +35,12 @@ class PostInformationFragment : Fragment() {
             return localPhotoFile
         }
 
-        fun isImageFile(mimeType: String?): Boolean {
-            return mimeType != null && mimeType.startsWith("image")
-        }
-
-        fun isVideoFile(mimeType: String?): Boolean {
-            return mimeType != null && mimeType.startsWith("video")
-        }
-
     }
     private var _binding: FragmentPostInformationBinding? = null
     private val viewModel: PostInformationViewModel by activityViewModels()
     private lateinit var pictureUUIDs: List<String>
     private lateinit var mediaAdapter: MediaAdapter
+    private var postSaved: Boolean = false
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -59,11 +52,8 @@ class PostInformationFragment : Fragment() {
         ) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val uri = result.data?.data!!
-                val contextResolver = context!!.contentResolver
-                val mimeType = contextResolver.getType(uri)
-                val isImage = isImageFile(mimeType)
 
-                viewModel.getMediaSuccess(uri, isImage)
+                viewModel.getMediaSuccess(uri)
                 Log.d(javaClass.simpleName, "result ok")
             } else {
                 viewModel.getMediaFailure()
@@ -127,13 +117,9 @@ class PostInformationFragment : Fragment() {
 
         val photoCreateButton = binding.photoCreateButton
         photoCreateButton.setOnClickListener {
-            getNewMedia(MediaStore.ACTION_IMAGE_CAPTURE)
+            getNewMedia()
         }
 
-        val videoCreateButton = binding.videoCreateButton
-        videoCreateButton.setOnClickListener {
-            getNewMedia(MediaStore.ACTION_VIDEO_CAPTURE)
-        }
 
         val cancelButton = binding.cancelButton
         cancelButton.setOnClickListener {
@@ -143,12 +129,18 @@ class PostInformationFragment : Fragment() {
         val saveButton = binding.saveButton
         saveButton.setOnClickListener {
             savePostInfo()
+            postSaved = true
         }
 
         return root
     }
 
     override fun onDestroyView() {
+
+        if (!postSaved) {
+            viewModel.deleteImages(pictureUUIDs)
+        }
+
         super.onDestroyView()
         _binding = null
     }
@@ -163,12 +155,26 @@ class PostInformationFragment : Fragment() {
 
         val priceHelpText = binding.priceHelpText
         priceHelpText.text = getString(R.string.price_help_text)
+
+        val roomHelpText = binding.roomsHelpText
+        roomHelpText.visibility = View.GONE
+
+        val roomEditText = binding.roomsEditText
+        roomEditText.visibility = View.GONE
+
+        val bathHelpText = binding.bathsHelpText
+        bathHelpText.visibility = View.GONE
+
+        val bathEditText = binding.bathsEditText
+        bathEditText.visibility = View.GONE
     }
 
 
     private fun savePostInfo() {
         val titleText = binding.titleEditText.text.toString()
         val descriptionText = binding.descriptionEditText.text.toString()
+        val priceText = binding.priceEditText.text.toString()
+
         if (titleText.isEmpty()) {
             Toast.makeText(activity,
                 "Enter a title!",
@@ -179,9 +185,15 @@ class PostInformationFragment : Fragment() {
                 "Enter a description!",
                 Toast.LENGTH_LONG).show()
         }
+
+        else if(priceText.isEmpty()) {
+            Toast.makeText(activity,
+                "Enter a price!",
+                Toast.LENGTH_LONG).show()
+        }
         else {
             Log.d(javaClass.simpleName, "create post len ${pictureUUIDs.size} pos")
-            val postInfo = listOf<String>(titleText, descriptionText)
+            val postInfo = listOf(titleText, descriptionText)
             viewModel.createUserPost(postInfo, pictureUUIDs)
 
             // When using navigation, don't manipulate the fragmentManger backstack
@@ -190,9 +202,9 @@ class PostInformationFragment : Fragment() {
         }
     }
 
-    private fun getNewMedia(mediaType: String) {
+    private fun getNewMedia() {
         val uuid = UUID.randomUUID().toString()
-        viewModel.getNewMedia(uuid, mediaType) {
+        viewModel.getNewMedia(uuid, MediaStore.ACTION_IMAGE_CAPTURE) {
             pictureUUIDs.toMutableList().apply{
                 add(uuid)
                 Log.d(javaClass.simpleName, "photo added $uuid len ${this.size}")
@@ -206,7 +218,6 @@ class PostInformationFragment : Fragment() {
         Intent(Intent.ACTION_GET_CONTENT).also { getMediaIntent ->
             getMediaIntent.type = "image/*"
             getMediaIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            getMediaIntent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*", "video/*"))
             existingMediaLauncher.launch(getMediaIntent)
         }
 

@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.bazaar.R
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.bazaar.databinding.FragmentSearchResultsBinding
 
 
@@ -17,6 +17,7 @@ class SearchResultsFragment: Fragment() {
 
     private var _binding: FragmentSearchResultsBinding? = null
     private val viewModel: SearchResultsViewModel by activityViewModels()
+    var fetchDone : MutableLiveData<Boolean> = MutableLiveData(false)
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -30,20 +31,16 @@ class SearchResultsFragment: Fragment() {
 
         _binding = FragmentSearchResultsBinding.inflate(inflater, container, false)
 
-        viewModel.fetchInitialCategoryPosts()
+        viewModel.fetchPostsForSearch()
 
         val searchResultsAdapter = SearchResultsAdapter(viewModel, parentFragmentManager)
         binding.searchResultsRV.layoutManager = LinearLayoutManager(context)
         binding.searchResultsRV.adapter = searchResultsAdapter
         viewModel.observeUserPosts().observe(viewLifecycleOwner) {
-            Log.d(javaClass.simpleName, "noteList observe len ${it.size}")
-            //toggleEmptyNotes()
+            Log.d(javaClass.simpleName, "postList observe len ${it.size}")
             searchResultsAdapter.submitList(it)
         }
-
-        //viewModel.observeSingleUserPost().observe(viewLifecycleOwner) {
-            //findNavController().navigate(R.id.one_post_for_search)
-        //}
+        initSwipeLayout(binding.swipeRefreshLayout)
 
         val root: View = binding.root
         return root
@@ -52,5 +49,15 @@ class SearchResultsFragment: Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun initSwipeLayout(swipe : SwipeRefreshLayout) {
+
+        viewModel.fetchDone.observe(viewLifecycleOwner) {
+            swipe.isRefreshing = false
+        }
+        swipe.setOnRefreshListener {
+            viewModel.fetchPostsForSearch()
+        }
     }
 }

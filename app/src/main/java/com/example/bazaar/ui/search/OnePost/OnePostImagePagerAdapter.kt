@@ -58,6 +58,6 @@ class OnePostImagePagerAdapter (val context: Context, val imageList: ArrayList<S
     // on below line we are creating a destroy item method.
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         // on below line we are removing view
-        container.removeView(`object` as RelativeLayout)
+        container.removeView(`object` as ConstraintLayout)
     }
 }

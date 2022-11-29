@@ -20,5 +20,9 @@ class OnePostImagePager : AppCompatActivity() {
 
         val viewPager = onePostBinding.idViewPager
         viewPager.adapter = viewPagerAdapter
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        supportActionBar?.setDisplayShowHomeEnabled(false); // remove the icon
+
     }
 }

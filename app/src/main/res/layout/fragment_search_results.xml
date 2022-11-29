@@ -6,10 +6,17 @@
     android:orientation="vertical"
     android:background="#FFFFFFFF"
     >
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/searchResultsRV"
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        />
+        android:layout_height="wrap_content"
+        android:id="@+id/swipeRefreshLayout"
+        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchResultsRV"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

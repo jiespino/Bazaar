@@ -14,11 +14,11 @@ class Storage {
     private val photoStorage: StorageReference =
         FirebaseStorage.getInstance().reference.child("images")
 
-    fun uploadUserSelectedMedia(file: Uri, uuid: String, mediaContentType: String, uploadSuccess:()->Unit) {
+    fun uploadUserSelectedMedia(file: Uri, uuid: String, uploadSuccess:()->Unit) {
 
         val uuidRef = photoStorage.child(uuid)
         val metadata = StorageMetadata.Builder()
-            .setContentType(mediaContentType)
+            .setContentType("image/jpg")
             .build()
         val uploadTask = uuidRef.putFile(file, metadata)
         //EEE // XXX Write me
@@ -34,12 +34,12 @@ class Storage {
             }
     }
 
-    fun uploadMedia(localFile: File, uuid: String, contentType: String, uploadSuccess:()->Unit) {
+    fun uploadMedia(localFile: File, uuid: String, uploadSuccess:()->Unit) {
         //SSS
         val file = Uri.fromFile(localFile)
         val uuidRef = photoStorage.child(uuid)
         val metadata = StorageMetadata.Builder()
-            .setContentType(contentType)
+            .setContentType("image/jpg")
             .build()
         val uploadTask = uuidRef.putFile(file, metadata)
         //EEE // XXX Write me

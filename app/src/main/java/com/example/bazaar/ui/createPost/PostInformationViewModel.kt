@@ -3,7 +3,6 @@ package com.example.bazaar.ui.createPost
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +10,6 @@ import com.example.bazaar.FireBaseAuth.FirestoreAuthLiveData
 import com.example.bazaar.Model.UserPost
 import com.example.bazaar.Storage.DBHelper
 import com.example.bazaar.Storage.Storage
-import com.example.bazaar.glide.Glide
 
 
 class PostInformationViewModel : ViewModel() {
@@ -20,7 +18,6 @@ class PostInformationViewModel : ViewModel() {
     private var pictureUUID: String =""
     private var usLocation = MutableLiveData<String>()
     private var chosenCategory = MutableLiveData<Category>()
-    private var isImage: Boolean = false
 
     private var firebaseAuthLiveData = FirestoreAuthLiveData()
     // Database access
@@ -32,7 +29,7 @@ class PostInformationViewModel : ViewModel() {
         Log.d(javaClass.simpleName, "Function must be initialized to something that can start the media intent")
         crashMe.plus("Media")
     }
-    private fun noPhoto(debugName1: String, debugName2:String) {
+    private fun noPhoto(debugName1: String, debugName2: String) {
         Log.d(javaClass.simpleName, "Function must be initialized to something that can start the camera intent")
         crashMe.plus(debugName1)
     }
@@ -91,28 +88,19 @@ class PostInformationViewModel : ViewModel() {
     /////////////////////////////////////////////////////////////
     // Get callback for when camera intent returns.
     // Send intent to take picture
-    fun getNewMedia(uuid: String, mediaType: String , _mediaSuccess: (String) -> Unit) {
+    fun getNewMedia(uuid: String, intentType: String, _mediaSuccess: (String) -> Unit) {
         mediaSuccess = _mediaSuccess
 
-        if (mediaType == MediaStore.ACTION_IMAGE_CAPTURE) {
-            isImage = true
-        }
-
-        takeNewMediaIntent(uuid, mediaType)
+        takeNewMediaIntent(uuid, intentType)
         // Have to remember this in the view model because
         // MainActivity can't remember it without savedInstanceState
         // crap.
         pictureUUID = uuid
     }
 
-    fun getMediaSuccess(mediaUri: Uri, isImage: Boolean) {
+    fun getMediaSuccess(mediaUri: Uri) {
 
-        var contentType = "video/mp4"
-        if (isImage) {
-            contentType = "image/jpg"
-        }
-
-        storage.uploadUserSelectedMedia(mediaUri, pictureUUID, contentType) {
+        storage.uploadUserSelectedMedia(mediaUri, pictureUUID) {
             mediaSuccess(pictureUUID)
             mediaSuccess = ::defaultPhoto
             pictureUUID = ""
@@ -127,25 +115,18 @@ class PostInformationViewModel : ViewModel() {
 
     fun takeMediaSuccess() {
 
-        var contentType = "video/mp4"
-        if (isImage) {
-            contentType = "image/jpg"
-        }
-
         val mediaFile = PostInformationFragment.localMediaFile(pictureUUID)
         // Wait until photo is successfully uploaded before calling back
-        storage.uploadMedia(mediaFile, pictureUUID, contentType) {
+        storage.uploadMedia(mediaFile, pictureUUID) {
             mediaSuccess(pictureUUID)
             mediaSuccess = ::defaultPhoto
             pictureUUID = ""
-            isImage = false
         }
     }
     fun takeMediaFailure() {
         // Note, the camera intent will only create the file if the user hits accept
         // so I've never seen this called
         pictureUUID = ""
-        isImage = false
     }
 
     fun createUserPost(postInfo: List<String>, pictureUUIDs: List<String>) {
@@ -165,8 +146,9 @@ class PostInformationViewModel : ViewModel() {
         dbHelp.createUserPost(userPost, usLocation.value!!, chosenCategory.value!!)
     }
 
-    fun glideFetch(pictureUUID: String, imageView: ImageView) {
-        Glide.fetch(storage.uuid2StorageReference(pictureUUID),
-            imageView)
+    fun deleteImages(savedPictureUUIDs: List<String>) {
+        savedPictureUUIDs.forEach {
+            storage.deleteImage(it)
+        }
     }
 }

@@ -17,20 +17,19 @@ class MyPostsViewModel : ViewModel() {
     private var userUuid = firebaseAuthLiveData.getCurrentUser()!!.uid
     // Database access
     private val dbHelp = DBHelper()
+    var fetchDone : MutableLiveData<Boolean> = MutableLiveData(false)
 
 
     init {
-        fetchInitialUserPosts()
+        fetchUserPosts()
     }
 
-    fun fetchInitialUserPosts() {
+    fun fetchUserPosts() {
         viewModelScope.launch (viewModelScope.coroutineContext
                 + Dispatchers.IO)
         {
             dbHelp.fetchInitialUserPosts(userUuid, userPostsList)
-            //val networkPosts = redditPostRepository.getPosts(subreddit.value!!)
-            //netPosts.postValue(networkPosts)
-            //fetchDone.postValue(true)
+            fetchDone.postValue(true)
         }
     }
 
@@ -38,8 +37,8 @@ class MyPostsViewModel : ViewModel() {
         currentUserPost.value = userPost
     }
 
-    fun observeSingleUserPost(): LiveData<UserPost> {
-        return currentUserPost
+    fun getCurrentUserPost(): UserPost {
+        return currentUserPost.value!!
     }
 
     fun observeUserPosts(): LiveData<List<UserPost>> {

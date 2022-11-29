@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bazaar.R
 import com.example.bazaar.databinding.FragmentSearchResultsBinding
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 class MyPostsFragment: Fragment() {
 
@@ -38,9 +39,7 @@ class MyPostsFragment: Fragment() {
             searchResultsAdapter.submitList(it)
         }
 
-       //viewModel.observeSingleUserPost().observe(viewLifecycleOwner) {
-            //findNavController().navigate(R.id.one_post_for_my_post)
-        //}
+        initSwipeLayout(binding.swipeRefreshLayout)
 
         val root: View = binding.root
         return root
@@ -49,5 +48,15 @@ class MyPostsFragment: Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun initSwipeLayout(swipe : SwipeRefreshLayout) {
+
+        viewModel.fetchDone.observe(viewLifecycleOwner) {
+            swipe.isRefreshing = false
+        }
+        swipe.setOnRefreshListener {
+            viewModel.fetchUserPosts()
+        }
     }
 }

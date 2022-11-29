@@ -18,7 +18,7 @@
 
 
     <string name="searchHelpText">Search: </string>
-    <string name="locationHelpText">Enter the location: </string>
+    <string name="locationHelpText">Location: </string>
     <string name="apartments">Apartments</string>
     <string name="electronics">Electronics</string>
     <string name="video_games">Video Games</string>
@@ -27,7 +27,7 @@
 
     <string name="title_help_text">Title: </string>
     <string name="description_help_text">Description: </string>
-    <string name="price_apt_help_text">Price per month: </string>
+    <string name="price_apt_help_text">Price/Month: </string>
     <string name="price_help_text">Price: </string>
     <string name="sq_feet_help_text">Square feet: </string>
 

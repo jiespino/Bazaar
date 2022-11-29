@@ -6,27 +6,39 @@ import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.bazaar.Model.UserPost
 import com.example.bazaar.Storage.DBHelper
 import com.example.bazaar.Storage.Storage
 import com.example.bazaar.glide.Glide
 import com.example.bazaar.ui.createPost.Category
 import com.example.bazaar.ui.search.OnePost.OnePostImagePager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SearchResultsViewModel : ViewModel() {
     private var userPostsList = MutableLiveData<List<UserPost>>()
-    private var currentLocation = MutableLiveData<String>()
+    private var currentLocation = MutableLiveData<List<String>>()
+    private var currentPriceRange = MutableLiveData<List<Float>>()
+    private var currentSearchText = MutableLiveData<String>()
     private var chosenCategory = MutableLiveData<Category>()
     private var currentUserPost = MutableLiveData<UserPost>()
     // Database access
     private val dbHelp = DBHelper()
+    var fetchDone : MutableLiveData<Boolean> = MutableLiveData(false)
 
     // Notes, memory cache and database interaction
-    fun fetchInitialCategoryPosts() {
-        dbHelp.fetchInitialCategoryPosts(currentLocation.value!!, chosenCategory.value!!, userPostsList)
+
+    fun fetchPostsForSearch() {
+        viewModelScope.launch (viewModelScope.coroutineContext
+                + Dispatchers.IO)
+        {
+            dbHelp.fetchPostsForSearch(currentLocation.value!!, chosenCategory.value!!, userPostsList)
+            fetchDone.postValue(true)
+        }
     }
 
-    fun setLocation(location: String) {
+    fun setLocation(location: List<String>) {
         currentLocation.value = location
     }
 
@@ -34,12 +46,20 @@ class SearchResultsViewModel : ViewModel() {
         chosenCategory.value = category
     }
 
+    fun setPriceRange(priceRange: List<Float>) {
+        currentPriceRange.value = priceRange
+    }
+
+    fun setSearchText(searchText: String) {
+        currentSearchText.value = searchText
+    }
+
     fun setUserPost(userPost: UserPost) {
         currentUserPost.value = userPost
     }
 
-    fun observeSingleUserPost(): LiveData<UserPost> {
-        return currentUserPost
+    fun getCurrentUserPost(): UserPost {
+        return currentUserPost.value!!
     }
 
     fun observeUserPosts(): LiveData<List<UserPost>> {
@@ -55,9 +75,9 @@ class SearchResultsViewModel : ViewModel() {
             )
         }
 
-        fun doOnePostImages(context: Context, userPost: UserPost) {
+        fun doOnePostImages(context: Context, pictureUUIDs: List<String>) {
             val onePostImageIntent = Intent(context, OnePostImagePager::class.java)
-            onePostImageIntent.putStringArrayListExtra("pictureUUIDs",  ArrayList(userPost.pictureUUIDs))
+            onePostImageIntent.putStringArrayListExtra("pictureUUIDs",  ArrayList(pictureUUIDs))
             context.startActivity(onePostImageIntent)
         }
     }

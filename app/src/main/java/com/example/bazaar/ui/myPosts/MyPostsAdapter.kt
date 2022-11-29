@@ -39,6 +39,11 @@ class MyPostsAdapter(private val viewModel: MyPostsViewModel, private val fragMa
             searchRowBinding.postTitle.text = currUserPost.title
             searchRowBinding.postDescription.text = currUserPost.description
 
+            searchRowBinding.mediaThumbnail.setOnClickListener {
+                viewModel.setUserPost(currUserPost)
+                fragManager.primaryNavigationFragment?.findNavController()?.navigate(R.id.one_post_for_my_post)
+            }
+
             searchRowBinding.searchResultCard.setOnClickListener {
                 viewModel.setUserPost(currUserPost)
                 fragManager.primaryNavigationFragment?.findNavController()?.navigate(R.id.one_post_for_my_post)

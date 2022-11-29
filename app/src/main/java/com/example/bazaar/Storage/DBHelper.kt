@@ -19,8 +19,8 @@ class DBHelper() {
         return string.substring(0..9) + "..."
     }
 
-    fun fetchInitialCategoryPosts(location: String, chosenCategory: Category, postsList: MutableLiveData<List<UserPost>>) {
-        dbFetchCategoryPosts(location, chosenCategory, postsList)
+    fun fetchPostsForSearch(location: List<String>, chosenCategory: Category, postsList: MutableLiveData<List<UserPost>>) {
+        dbFetchPostsForSearch(location, chosenCategory, postsList)
     }
 
     fun fetchInitialUserPosts(userUid: String, userPostsList: MutableLiveData<List<UserPost>>) {
@@ -34,19 +34,28 @@ class DBHelper() {
     // .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
     // But be careful about how listener updates live data
     // and noteListener?.remove() in onCleared
-    private fun dbFetchCategoryPosts(location: String, category: Category, userPostList: MutableLiveData<List<UserPost>>) {
+    private fun dbFetchPostsForSearch(location: List<String>, category: Category, userPostList: MutableLiveData<List<UserPost>>) {
         db.collection(collectionRootAllPosts)
-            .document(location)
+            .document(location.joinToString(","))
             .collection(category.toString())
             .orderBy("timeStamp", Query.Direction.DESCENDING)
-            .limit(100)
+            .limit(1000)
             .get()
             .addOnSuccessListener { result ->
                 Log.d(javaClass.simpleName, "all user posts  fetch ${result!!.documents.size}")
                 // NB: This is done on a background thread
-                userPostList.postValue(result.documents.mapNotNull {
-                    it.toObject(UserPost::class.java)
-                })
+
+                Log.e("XXX", result.documents.toString())
+                val totalUserPosts = mutableListOf<UserPost>()
+
+                result.documents.mapNotNull {
+                    val userPost = it.toObject(UserPost::class.java)
+                    if (meetsFilterCriteria(userPost!!)) {
+                        totalUserPosts.add(userPost)
+                    }
+                }
+
+                userPostList.postValue(totalUserPosts)
             }
             .addOnFailureListener {
                 Log.d(javaClass.simpleName, "all user posts fetch FAILED ", it)
@@ -58,7 +67,7 @@ class DBHelper() {
             .document(userUid)
             .collection(collectionRootSingleUserPosts)
             .orderBy("timeStamp", Query.Direction.DESCENDING)
-            .limit(100)
+            .limit(1000)
             .get()
             .addOnSuccessListener { result ->
                 Log.d(javaClass.simpleName, "all user posts  fetch ${result!!.documents.size}")
@@ -157,5 +166,9 @@ class DBHelper() {
                 Log.d(javaClass.simpleName, "Note deleting FAILED \"${elipsizeString(userPost.title)}\"")
                 Log.w(javaClass.simpleName, "Error adding document", e)
             }
+    }
+
+    private fun meetsFilterCriteria(userPost: UserPost): Boolean {
+        return true
     }
 }

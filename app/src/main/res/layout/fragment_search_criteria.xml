@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/searchHelpText"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/location_help_text"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,6 +25,9 @@
         android:layout_marginEnd="8dp"
         android:textAlignment="center"
         android:textSize="20sp"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".7"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintTop_toTopOf="@id/search_help_text"
         app:layout_constraintBottom_toBottomOf="@id/search_help_text"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,8 +38,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/locationHelpText"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintTop_toBottomOf="@id/search_help_text"
-        app:layout_constraintBottom_toTopOf="@id/categories"
+        app:layout_constraintBottom_toTopOf="@id/price_slider"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/location_edit_text"/>
     <EditText
@@ -47,11 +52,64 @@
         android:layout_marginEnd="8dp"
         android:textAlignment="center"
         android:textSize="20sp"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".7"
         app:layout_constraintTop_toTopOf="@id/location_help_text"
         app:layout_constraintBottom_toBottomOf="@id/location_help_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/location_help_text"
         />
+
+    <TextView
+        android:id="@+id/price_help_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/price_help_text"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintTop_toBottomOf="@id/location_help_text"
+        app:layout_constraintBottom_toTopOf="@id/sq_feet_help_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/price_slider"/>
+
+    <com.google.android.material.slider.RangeSlider
+        android:id="@+id/price_slider"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:value="0"
+        android:valueFrom="0"
+        android:valueTo="5000"
+        app:labelBehavior="visible"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".7"
+        app:layout_constraintTop_toTopOf="@id/price_help_text"
+        app:layout_constraintBottom_toBottomOf="@id/price_help_text"
+        app:layout_constraintStart_toEndOf="@id/price_help_text"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/sq_feet_help_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sq_feet_help_text"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintTop_toBottomOf="@id/price_help_text"
+        app:layout_constraintBottom_toTopOf="@id/categories"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/sq_feet_slider"/>
+
+    <com.google.android.material.slider.RangeSlider
+        android:id="@+id/sq_feet_slider"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:value="0"
+        android:valueFrom="0"
+        android:valueTo="3000"
+        app:labelBehavior="visible"
+        app:layout_constraintWidth_percent="0.7"
+        app:layout_constraintTop_toTopOf="@id/sq_feet_help_text"
+        app:layout_constraintBottom_toBottomOf="@id/sq_feet_help_text"
+        app:layout_constraintStart_toEndOf="@id/sq_feet_help_text"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <RadioGroup
         android:id="@+id/categories"

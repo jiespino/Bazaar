@@ -43,6 +43,11 @@ class SearchResultsAdapter(private val viewModel: SearchResultsViewModel, privat
             searchRowBinding.postTitle.text = currUserPost.title
             searchRowBinding.postDescription.text = currUserPost.description
 
+            searchRowBinding.mediaThumbnail.setOnClickListener {
+                viewModel.setUserPost(currUserPost)
+                fragManager.primaryNavigationFragment?.findNavController()?.navigate(R.id.one_post_for_search)
+            }
+
             searchRowBinding.searchResultCard.setOnClickListener {
                 viewModel.setUserPost(currUserPost)
                 fragManager.primaryNavigationFragment?.findNavController()?.navigate(R.id.one_post_for_search)

@@ -1,4 +1,4 @@
-package com.example.bazaar.ui.search.OnePost
+package com.example.bazaar.ui.myPosts.OnePost
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bazaar.R
+import com.example.bazaar.ui.myPosts.MyPostsViewModel
 import com.example.bazaar.ui.search.SearchResultsViewModel
 
-class OnePostMediaAdapter(private val viewModel: SearchResultsViewModel):
+class OnePostMediaAdapter(private val viewModel: MyPostsViewModel):
     ListAdapter<String, OnePostMediaAdapter.VH>(Diff()) {
     // This class allows the adapter to compute what has changed
     class Diff : DiffUtil.ItemCallback<String>() {
