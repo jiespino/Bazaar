@@ -1,10 +1,11 @@
 package com.example.bazaar.ui.myPosts
 
+import android.content.res.Resources
+import android.provider.Settings.System.getString
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.commit
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -12,8 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.bazaar.Model.UserPost
 import com.example.bazaar.R
 import com.example.bazaar.databinding.SearchResultRowBinding
-import com.example.bazaar.ui.myPosts.OnePost.OnePostFragment
+import com.example.bazaar.ui.createPost.Category
 import com.example.bazaar.ui.search.SearchResultsViewModel
+import java.util.*
 
 class MyPostsAdapter(private val viewModel: MyPostsViewModel, private val fragManager: FragmentManager) :
     ListAdapter<UserPost, MyPostsAdapter.VH>(Diff()) {
@@ -36,8 +38,42 @@ class MyPostsAdapter(private val viewModel: MyPostsViewModel, private val fragMa
                 val pictureUUID = currUserPost.pictureUUIDs[0]
                 SearchResultsViewModel.glideFetch(pictureUUID, photoIB)
             }
+
+            val city = currUserPost.city
+            val state = currUserPost.state
+            val countryCode = currUserPost.countryCode
+            searchRowBinding.postLocation.text = "$city $state, $countryCode"
+            searchRowBinding.postCategory.text = currUserPost.category.lowercase()
+                .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
             searchRowBinding.postTitle.text = currUserPost.title
             searchRowBinding.postDescription.text = currUserPost.description
+            searchRowBinding.postPrice.text = currUserPost.price.toString()
+            searchRowBinding.postEmail.text = currUserPost.userEmail
+
+            val price = currUserPost.price
+            val context = photoIB.context
+
+            if (currUserPost.phoneNumber.isNotEmpty()) {
+                searchRowBinding.postPhone.text = currUserPost.phoneNumber
+            }
+
+            if (currUserPost.category == Category.APARTMENT.toString()) {
+                val sqFeetHelpText = context.getString(R.string.sq_feet_abbr_help_text)
+                val sqFeetText = currUserPost.aptInfo?.squareFeet.toString()
+                searchRowBinding.postSquareFeet.text = "$sqFeetHelpText $sqFeetText"
+
+                val roomHelpText = context.getString(R.string.room_help_text)
+                val roomText = currUserPost.aptInfo?.rooms.toString()
+                searchRowBinding.postRooms.text = "$roomHelpText $roomText"
+
+                val bathHelpText = context.getString(R.string.bath_help_text)
+                val bathText = currUserPost.aptInfo?.baths.toString()
+                searchRowBinding.postBaths.text = "$bathHelpText $bathText"
+            }
+
+            val priceHelpText = context.getString(R.string.price_help_text)
+            searchRowBinding.postPrice.text = "$priceHelpText $price"
+
 
             searchRowBinding.mediaThumbnail.setOnClickListener {
                 viewModel.setUserPost(currUserPost)

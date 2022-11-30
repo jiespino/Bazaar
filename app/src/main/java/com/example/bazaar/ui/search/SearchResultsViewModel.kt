@@ -75,9 +75,10 @@ class SearchResultsViewModel : ViewModel() {
             )
         }
 
-        fun doOnePostImages(context: Context, pictureUUIDs: List<String>) {
+        fun doOnePostImages(context: Context, singlePictureUUID: String, pictureUUIDs: List<String>) {
             val onePostImageIntent = Intent(context, OnePostImagePager::class.java)
             onePostImageIntent.putStringArrayListExtra("pictureUUIDs",  ArrayList(pictureUUIDs))
+            onePostImageIntent.putExtra("singlePictureUUID",  singlePictureUUID)
             context.startActivity(onePostImageIntent)
         }
     }

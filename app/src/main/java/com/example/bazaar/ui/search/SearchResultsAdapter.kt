@@ -17,7 +17,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.findNavController
+import com.example.bazaar.ui.createPost.Category
 import com.google.android.material.internal.ContextUtils.getActivity
+import java.util.*
 
 class SearchResultsAdapter(private val viewModel: SearchResultsViewModel, private val fragManager: FragmentManager) :
     ListAdapter<UserPost, SearchResultsAdapter.VH>(Diff()) {
@@ -40,8 +42,41 @@ class SearchResultsAdapter(private val viewModel: SearchResultsViewModel, privat
                 val pictureUUID = currUserPost.pictureUUIDs[0]
                 SearchResultsViewModel.glideFetch(pictureUUID, photoIB)
             }
+
+            val city = currUserPost.city
+            val state = currUserPost.state
+            val countryCode = currUserPost.countryCode
+            searchRowBinding.postLocation.text = "$city $state, $countryCode"
+            searchRowBinding.postCategory.text = currUserPost.category.lowercase()
+                .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
             searchRowBinding.postTitle.text = currUserPost.title
             searchRowBinding.postDescription.text = currUserPost.description
+            searchRowBinding.postPrice.text = currUserPost.price.toString()
+            searchRowBinding.postEmail.text = currUserPost.userEmail
+
+            val price = currUserPost.price
+            val context = photoIB.context
+
+            if (currUserPost.phoneNumber.isNotEmpty()) {
+                searchRowBinding.postPhone.text = currUserPost.phoneNumber
+            }
+
+            if (currUserPost.category == Category.APARTMENT.toString()) {
+                val sqFeetHelpText = context.getString(R.string.sq_feet_abbr_help_text)
+                val sqFeetText = currUserPost.aptInfo?.squareFeet.toString()
+                searchRowBinding.postSquareFeet.text = "$sqFeetHelpText $sqFeetText"
+
+                val roomHelpText = context.getString(R.string.room_help_text)
+                val roomText = currUserPost.aptInfo?.rooms.toString()
+                searchRowBinding.postRooms.text = "$roomHelpText $roomText"
+
+                val bathHelpText = context.getString(R.string.bath_help_text)
+                val bathText = currUserPost.aptInfo?.baths.toString()
+                searchRowBinding.postBaths.text = "$bathHelpText $bathText"
+            }
+
+            val priceHelpText = context.getString(R.string.price_help_text)
+            searchRowBinding.postPrice.text = "$priceHelpText $price"
 
             searchRowBinding.mediaThumbnail.setOnClickListener {
                 viewModel.setUserPost(currUserPost)

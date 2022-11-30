@@ -12,8 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/mediaThumbnail"
@@ -28,16 +27,39 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_weight="2"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_margin="6dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00000000">
+                <TextView
+                    android:id="@+id/post_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="italic"
+                    android:text="@string/dummy_text"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
+                <TextView
+                    android:id="@+id/post_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="italic"
+                    android:text="@string/dummy_text"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/post_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+                android:text="@string/dummy_text"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+               />
 
             <TextView
                 android:id="@+id/post_description"
@@ -45,9 +67,83 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
+                android:text="@string/dummy_text"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_margin="12dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00000000">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_margin="12dip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#00000000">
+                    <TextView
+                        android:id="@+id/post_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/dummy_text"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                    <TextView
+                        android:id="@+id/post_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/dummy_text"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                    <TextView
+                        android:id="@+id/post_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/dummy_text"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_margin="12dip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#00000000">
+                    <TextView
+                        android:id="@+id/post_square_feet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/dummy_text"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                    <TextView
+                        android:id="@+id/post_rooms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/dummy_text"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                    <TextView
+                        android:id="@+id/post_baths"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/dummy_text"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                </LinearLayout>
+            </LinearLayout>
+
+
+
         </LinearLayout>
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>
 

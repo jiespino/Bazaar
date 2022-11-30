@@ -108,7 +108,7 @@ class DBHelper() {
 
     fun createUserPost(
         userPost: UserPost,
-        location: String,
+        location: List<String>,
         chosenCategory: Category
     ) {
         // We can get ID locally
@@ -118,7 +118,7 @@ class DBHelper() {
             "Note CREETE TEST WHAT \"${elipsizeString(userPost.title)}\" id: ${userPost.firestoreID}"
         )
         db.collection(collectionRootAllPosts)
-            .document(location)
+            .document(location.joinToString(","))
             .collection(chosenCategory.toString())
             .add(userPost)
             .addOnSuccessListener {

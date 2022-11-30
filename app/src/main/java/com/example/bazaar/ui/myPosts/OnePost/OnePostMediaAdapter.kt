@@ -29,13 +29,13 @@ class OnePostMediaAdapter(private val viewModel: MyPostsViewModel):
         fun bind(pictureUUID: String) {
             SearchResultsViewModel.glideFetch(pictureUUID, photoIB)
             photoIB.setOnClickListener {
-                SearchResultsViewModel.doOnePostImages(photoIB.context, viewModel.getCurrentUserPost().pictureUUIDs)
+                SearchResultsViewModel.doOnePostImages(photoIB.context, pictureUUID, viewModel.getCurrentUserPost().pictureUUIDs)
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.media_list_row,
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.photo_list_row,
             parent, false)
         return VH(itemView)
     }

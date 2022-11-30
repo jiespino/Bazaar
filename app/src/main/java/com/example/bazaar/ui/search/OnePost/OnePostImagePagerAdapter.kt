@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.RelativeLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.viewpager.widget.PagerAdapter
 import com.example.bazaar.R
@@ -35,7 +34,7 @@ class OnePostImagePagerAdapter (val context: Context, val imageList: ArrayList<S
 
         // on below line we are inflating our custom
         // layout file which we have created.
-        val itemView: View = mLayoutInflater.inflate(R.layout.media_list_row, container, false)
+        val itemView: View = mLayoutInflater.inflate(R.layout.photo_list_row, container, false)
 
         // on below line we are initializing
         // our image view with the id.

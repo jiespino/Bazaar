@@ -39,7 +39,7 @@ class MediaAdapter(private val deletePos:((Int)->Unit)? = null) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.media_list_row,
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.photo_list_row,
             parent, false)
         return VH(itemView)
     }

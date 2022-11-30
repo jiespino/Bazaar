@@ -6,7 +6,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.telephony.PhoneNumberFormattingTextWatcher
 import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,16 +17,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.bazaar.databinding.FragmentPostInformationBinding
+import com.example.bazaar.Model.AptInfo
+import com.example.bazaar.R
+import com.example.bazaar.databinding.FragmentCreatePostBinding
 import java.io.File
 import java.io.IOException
 import java.util.*
-import androidx.navigation.fragment.findNavController
-import com.example.bazaar.R
 
 
-class PostInformationFragment : Fragment() {
+class CreatePostFragment : Fragment() {
 
     companion object {
         private val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
@@ -36,8 +39,8 @@ class PostInformationFragment : Fragment() {
         }
 
     }
-    private var _binding: FragmentPostInformationBinding? = null
-    private val viewModel: PostInformationViewModel by activityViewModels()
+    private var _binding: FragmentCreatePostBinding? = null
+    private val viewModel: CreatePostViewModel by activityViewModels()
     private lateinit var pictureUUIDs: List<String>
     private lateinit var mediaAdapter: MediaAdapter
     private var postSaved: Boolean = false
@@ -76,7 +79,7 @@ class PostInformationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentPostInformationBinding.inflate(inflater, container, false)
+        _binding = FragmentCreatePostBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         viewModel.setNewMediaIntent(::getNewMediaIntent)
@@ -86,6 +89,15 @@ class PostInformationFragment : Fragment() {
         if (viewModel.observeCategory().value != Category.APARTMENT) {
             hideAptLayout()
         }
+
+        val phoneNumEditText = binding.phoneNumberEditText
+        phoneNumEditText.addTextChangedListener(PhoneNumberFormattingTextWatcher())
+
+        val currLocation = viewModel.getLocation()
+        val city = currLocation[0]
+        val state = currLocation[1]
+        val countryCode = currLocation[2]
+        binding.locationText.text = "$city $state, $countryCode"
 
         val mediaAttachButton = binding.mediaAttachButton
 
@@ -101,10 +113,11 @@ class PostInformationFragment : Fragment() {
             }
         }
 
-
         mediaAdapter = MediaAdapter { pictureUUIDPosition ->
             Log.d(javaClass.simpleName, "pictureUUIDs del $pictureUUIDPosition")
             val shorterList = pictureUUIDs.toMutableList()
+            val currentPictureUUID = shorterList[pictureUUIDPosition]
+            viewModel.deleteImage(currentPictureUUID)
             shorterList.removeAt(pictureUUIDPosition)
             pictureUUIDs = shorterList
             mediaAdapter.submitList(pictureUUIDs)
@@ -173,31 +186,39 @@ class PostInformationFragment : Fragment() {
     private fun savePostInfo() {
         val titleText = binding.titleEditText.text.toString()
         val descriptionText = binding.descriptionEditText.text.toString()
+        val phoneNumberText = binding.phoneNumberEditText.text.toString()
         val priceText = binding.priceEditText.text.toString()
+        val squareFeet = binding.sqFeetEditText.text.toString()
+        val rooms = binding.roomsEditText.text.toString()
+        val baths = binding.bathsEditText.text.toString()
 
-        if (titleText.isEmpty()) {
-            Toast.makeText(activity,
-                "Enter a title!",
-                Toast.LENGTH_LONG).show()
-        }
-        else if(descriptionText.isEmpty()) {
-            Toast.makeText(activity,
-                "Enter a description!",
-                Toast.LENGTH_LONG).show()
-        }
+        val validationInfo = validateInput()
+        val isBadInput = validationInfo[0] as Boolean
+        val errMsg = validationInfo[1] as String
 
-        else if(priceText.isEmpty()) {
+
+
+       if (isBadInput) {
             Toast.makeText(activity,
-                "Enter a price!",
+                errMsg,
                 Toast.LENGTH_LONG).show()
         }
         else {
             Log.d(javaClass.simpleName, "create post len ${pictureUUIDs.size} pos")
-            val postInfo = listOf(titleText, descriptionText)
-            viewModel.createUserPost(postInfo, pictureUUIDs)
 
-            // When using navigation, don't manipulate the fragmentManger backstack
-            // directly!  NO parentFragmentManager.popBackStack()
+            val aptInfo: AptInfo?
+            if (viewModel.getCategory() == Category.APARTMENT) {
+                aptInfo = AptInfo(
+                    squareFeet = squareFeet.toInt(),
+                    rooms = rooms.toInt(),
+                    baths = baths.toInt()
+                )
+            } else {
+                aptInfo = null
+            }
+
+            val postInfo = listOf(titleText, descriptionText, priceText, phoneNumberText)
+            viewModel.createUserPost(postInfo, aptInfo, pictureUUIDs)
             findNavController().popBackStack()
         }
     }
@@ -248,6 +269,65 @@ class PostInformationFragment : Fragment() {
         }
         // CRASH.  Production code should do something more graceful
         return mediaUri!!
+    }
+
+    private fun isValidPhoneNumber(phone: String): Boolean {
+        return if (phone.trim { it <= ' ' } != "" && phone.length > 10) {
+            Patterns.PHONE.matcher(phone).matches()
+        } else false
+    }
+
+    private fun validateInput(): List<Any> {
+
+        val titleText = binding.titleEditText.text.toString()
+        val descriptionText = binding.descriptionEditText.text.toString()
+        val phoneNumberText = binding.phoneNumberEditText.text.toString()
+        val priceText = binding.priceEditText.text.toString()
+        val squareFeet = binding.sqFeetEditText.text.toString()
+        val rooms = binding.roomsEditText.text.toString()
+        val baths = binding.bathsEditText.text.toString()
+
+        var errorMessage = ""
+
+
+        if (titleText.isEmpty()) {
+            errorMessage = "Enter a title!"
+            return listOf(true, errorMessage)
+        }
+        else if(descriptionText.isEmpty()) {
+            errorMessage = "Enter a description!"
+            return listOf(true, errorMessage)
+        }
+
+        else if(priceText.isEmpty()) {
+            errorMessage = "Enter a price!"
+            return listOf(true, errorMessage)
+        }
+
+        else if(phoneNumberText.isNotEmpty() and !isValidPhoneNumber(phoneNumberText)) {
+            errorMessage = "Enter a valid phone number!"
+            return listOf(true, errorMessage)
+
+        }
+
+        if (viewModel.getCategory() != Category.APARTMENT) {
+            return listOf(false, errorMessage)
+        }
+
+
+        if(squareFeet.isEmpty()) {
+            errorMessage = "Enter the square feet!"
+            return listOf(true, errorMessage)
+
+        } else if(rooms.isEmpty()) {
+            errorMessage = "Enter the number of rooms!"
+            return listOf(true, errorMessage)
+
+        } else if(baths.isEmpty()) {
+            errorMessage = "Enter the number of baths!"
+            return listOf(true, errorMessage)
+        }
+        return listOf(false, errorMessage)
     }
 
 }

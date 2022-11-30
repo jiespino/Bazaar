@@ -3,6 +3,7 @@ package com.example.bazaar.ui.search.OnePost
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bazaar.databinding.OnePostImagePagerBinding
+import java.util.ArrayList
 
 class OnePostImagePager : AppCompatActivity() {
 
@@ -14,9 +15,17 @@ class OnePostImagePager : AppCompatActivity() {
         setContentView(onePostBinding.root)
 
         // XXX Write me Set our currentUser variable based on what MainActivity passed us
-        val pictureUUIDs = intent.getStringArrayListExtra("pictureUUIDs")
+        val pictureUUIDs = intent.getStringArrayListExtra("pictureUUIDs")!!
+        val singlePictureUUID = intent.getStringExtra("singlePictureUUID")
 
-        val viewPagerAdapter = OnePostImagePagerAdapter(this, pictureUUIDs!!)
+        val indexOfPicture = pictureUUIDs.indexOf(singlePictureUUID)
+
+        val firstHalfPics = pictureUUIDs.slice(indexOfPicture until pictureUUIDs.size)
+        val secondHalfPics = pictureUUIDs.slice(0 until indexOfPicture)
+
+        val viewPagerAdapter = OnePostImagePagerAdapter(this,
+            firstHalfPics.plus(secondHalfPics) as ArrayList<String>
+        )
 
         val viewPager = onePostBinding.idViewPager
         viewPager.adapter = viewPagerAdapter

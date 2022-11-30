@@ -63,7 +63,7 @@
             android:id="@+id/create_post"
             android:name="com.example.bazaar.ui.createPost.PostCriteriaFragment"
             android:label="@string/title_post"
-            tools:layout="@layout/fragment_create_post" >
+            tools:layout="@layout/fragment_criteria_create_post" >
             <action
                 android:id="@+id/action_post_criteria_to_post_info"
                 app:destination="@+id/navigation_post_information"
@@ -72,9 +72,9 @@
 
         <fragment
             android:id="@+id/navigation_post_information"
-            android:name="com.example.bazaar.ui.createPost.PostInformationFragment"
+            android:name="com.example.bazaar.ui.createPost.CreatePostFragment"
             android:label="@string/title_post_information"
-            tools:layout="@layout/fragment_post_information"/>
+            tools:layout="@layout/fragment_create_post"/>
     </navigation>
 
 </navigation>

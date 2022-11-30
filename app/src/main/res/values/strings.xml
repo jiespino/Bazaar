@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Bazaar</string>
 
+    <string name="dummy_text">dummy text</string>
+
     <string name="title_my_posts">My Posts</string>
 
 
@@ -17,19 +19,24 @@
     <string name="title_notifications">Notifications</string>
 
 
-    <string name="searchHelpText">Search: </string>
-    <string name="locationHelpText">Location: </string>
+    <string name="searchHelpText">Search:</string>
+    <string name="locationHelpText">Location:</string>
     <string name="apartments">Apartments</string>
     <string name="electronics">Electronics</string>
     <string name="video_games">Video Games</string>
     <string name="collectible_cards">Collectible Cards</string>
     <string name="tools">Tools</string>
 
-    <string name="title_help_text">Title: </string>
-    <string name="description_help_text">Description: </string>
-    <string name="price_apt_help_text">Price/Month: </string>
-    <string name="price_help_text">Price: </string>
-    <string name="sq_feet_help_text">Square feet: </string>
+    <string name="title_help_text">Title:</string>
+    <string name="description_help_text">Description:</string>
+    <string name="email_help_text">Email:</string>
+    <string name="phone_number_help_text">Phone:</string>
+    <string name="price_apt_help_text">Price/Month:</string>
+    <string name="price_help_text">Price:</string>
+    <string name="sq_feet_help_text">Square feet:</string>
+    <string name="sq_feet_abbr_help_text">Sq ft:</string>
+    <string name="room_help_text">Rooms:</string>
+    <string name="bath_help_text">Baths:</string>
 
     <string name="cancel_button_text">Cancel</string>
     <string name="save_button_text">Save</string>

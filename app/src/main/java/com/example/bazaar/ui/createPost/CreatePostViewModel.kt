@@ -1,22 +1,22 @@
 package com.example.bazaar.ui.createPost
 
 import android.net.Uri
-import android.provider.MediaStore
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.bazaar.FireBaseAuth.FirestoreAuthLiveData
+import com.example.bazaar.Model.AptInfo
 import com.example.bazaar.Model.UserPost
 import com.example.bazaar.Storage.DBHelper
 import com.example.bazaar.Storage.Storage
 
 
-class PostInformationViewModel : ViewModel() {
+class CreatePostViewModel : ViewModel() {
 
     private val storage = Storage()
     private var pictureUUID: String =""
-    private var usLocation = MutableLiveData<String>()
+    private var currentLocation = MutableLiveData<List<String>>()
     private var chosenCategory = MutableLiveData<Category>()
 
     private var firebaseAuthLiveData = FirestoreAuthLiveData()
@@ -43,15 +43,23 @@ class PostInformationViewModel : ViewModel() {
     }
     private var mediaSuccess: (path: String) -> Unit = ::defaultPhoto
 
-    fun setLocation(location: String) {
-        usLocation.value = location
+    fun setLocation(location: List<String>) {
+        currentLocation.value = location
+    }
+
+    fun getLocation(): List<String> {
+        return currentLocation.value!!
     }
 
     fun setCategory(currentCategory: Category) {
         chosenCategory.value = currentCategory
     }
 
-    fun observeCategory():LiveData<Category> {
+    fun getCategory(): Category {
+        return chosenCategory.value!!
+    }
+
+    fun observeCategory(): LiveData<Category> {
         return chosenCategory
     }
 
@@ -115,7 +123,7 @@ class PostInformationViewModel : ViewModel() {
 
     fun takeMediaSuccess() {
 
-        val mediaFile = PostInformationFragment.localMediaFile(pictureUUID)
+        val mediaFile = CreatePostFragment.localMediaFile(pictureUUID)
         // Wait until photo is successfully uploaded before calling back
         storage.uploadMedia(mediaFile, pictureUUID) {
             mediaSuccess(pictureUUID)
@@ -129,26 +137,44 @@ class PostInformationViewModel : ViewModel() {
         pictureUUID = ""
     }
 
-    fun createUserPost(postInfo: List<String>, pictureUUIDs: List<String>) {
+    fun createUserPost(postInfo: List<String>, aptInfo: AptInfo?, pictureUUIDs: List<String>) {
 
         val title = postInfo[0]
         val description = postInfo[1]
+        val price = postInfo[2].toInt()
+        val phoneNumber = postInfo[3]
+
+        val city = currentLocation.value?.get(0)!!
+        val state = currentLocation.value?.get(1)!!
+        val countryCode = currentLocation.value?.get(2)!!
 
         val currentUser = firebaseAuthLiveData.getCurrentUser()!!
         val userPost = UserPost(
             userName = currentUser.displayName ?: "Anonymous user",
+            userEmail = currentUser.email?: "Anonymous email",
             ownerUid = currentUser.uid,
+            category = chosenCategory.value.toString(),
             title = title,
             description = description,
+            price = price,
+            phoneNumber = phoneNumber,
+            city = city,
+            state = state,
+            aptInfo = aptInfo,
+            countryCode = countryCode,
             pictureUUIDs = pictureUUIDs
             // database sets firestoreID
         )
-        dbHelp.createUserPost(userPost, usLocation.value!!, chosenCategory.value!!)
+        dbHelp.createUserPost(userPost, currentLocation.value!!, chosenCategory.value!!)
     }
 
     fun deleteImages(savedPictureUUIDs: List<String>) {
         savedPictureUUIDs.forEach {
-            storage.deleteImage(it)
+            deleteImage(it)
         }
+    }
+
+    fun deleteImage(pictureUUID: String) {
+        storage.deleteImage(pictureUUID)
     }
 }

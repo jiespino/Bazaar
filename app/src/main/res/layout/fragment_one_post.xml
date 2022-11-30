@@ -5,43 +5,207 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
+        android:id="@+id/location_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
+        android:textSize="16sp"
+        android:text="@string/dummy_text"
+        android:textAlignment="textEnd"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/category_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+    <TextView
+        android:id="@+id/category_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
+        android:textSize="16sp"
+        android:text="@string/dummy_text"
+        android:textAlignment="textEnd"
+        app:layout_constraintTop_toBottomOf="@id/location_text"
+        app:layout_constraintBottom_toTopOf="@id/title_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
         android:id="@+id/title_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="28sp"
+        android:text="@string/dummy_text"
+        app:layout_constraintTop_toBottomOf="@id/category_text"
         app:layout_constraintBottom_toTopOf="@id/description_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
     <TextView
         android:id="@+id/description_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="24sp"
+        android:text="@string/dummy_text"
         app:layout_constraintTop_toBottomOf="@id/title_text"
-        app:layout_constraintBottom_toTopOf="@id/price_text"
+        app:layout_constraintBottom_toTopOf="@id/email_help_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/email_help_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="@string/email_help_text"
+        android:textAlignment="textEnd"
+        app:layout_constraintTop_toBottomOf="@id/description_text"
+        app:layout_constraintBottom_toTopOf="@id/phone_help_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/email_text"/>
+
+    <TextView
+        android:id="@+id/email_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="dummy email"
+        android:focusable="true"
+        android:textAlignment="center"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".6"
+        app:layout_constraintTop_toTopOf="@+id/email_help_text"
+        app:layout_constraintBottom_toBottomOf="@+id/email_help_text"
+        app:layout_constraintStart_toEndOf="@+id/email_help_text"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/phone_help_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="@string/phone_number_help_text"
+        android:textAlignment="textEnd"
+        app:layout_constraintTop_toBottomOf="@id/email_help_text"
+        app:layout_constraintBottom_toTopOf="@id/price_help_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/phone_text"/>
+
+    <TextView
+        android:id="@+id/phone_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:clickable="true"
+        android:text="dummy phone"
+        android:focusable="true"
+        android:textColor="@color/fui_linkColor"
+        android:textAlignment="center"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".6"
+        app:layout_constraintTop_toTopOf="@+id/phone_help_text"
+        app:layout_constraintBottom_toBottomOf="@+id/phone_help_text"
+        app:layout_constraintStart_toEndOf="@+id/phone_help_text"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/price_help_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="@string/price_help_text"
+        android:textAlignment="textEnd"
+        app:layout_constraintTop_toBottomOf="@id/phone_help_text"
+        app:layout_constraintBottom_toTopOf="@id/sq_feet_help_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/price_text"/>
 
     <TextView
         android:id="@+id/price_text"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@id/description_text"
-        app:layout_constraintBottom_toTopOf="@id/sq_feet_text"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textAlignment="center"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".6"
+        app:layout_constraintTop_toTopOf="@id/price_help_text"
+        app:layout_constraintBottom_toBottomOf="@id/price_help_text"
+        app:layout_constraintStart_toEndOf="@id/price_help_text"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
-        android:id="@+id/sq_feet_text"
-        android:layout_width="wrap_content"
+        android:id="@+id/sq_feet_help_text"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@id/price_text"
+        android:text="@string/sq_feet_help_text"
+        android:textAlignment="textEnd"
+        app:layout_constraintTop_toBottomOf="@id/price_help_text"
+        app:layout_constraintBottom_toTopOf="@id/room_help_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/sq_feet_text"/>
+
+    <TextView
+        android:id="@+id/sq_feet_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".6"
+        app:layout_constraintTop_toTopOf="@+id/sq_feet_help_text"
+        app:layout_constraintBottom_toBottomOf="@+id/sq_feet_help_text"
+        app:layout_constraintStart_toEndOf="@+id/sq_feet_help_text"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/room_help_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="@string/room_help_text"
+        android:textAlignment="textEnd"
+        app:layout_constraintTop_toBottomOf="@id/sq_feet_help_text"
+        app:layout_constraintBottom_toTopOf="@id/bath_help_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/room_text"/>
+
+    <TextView
+        android:id="@+id/room_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".6"
+        app:layout_constraintTop_toTopOf="@id/room_help_text"
+        app:layout_constraintBottom_toBottomOf="@id/room_help_text"
+        app:layout_constraintStart_toEndOf="@id/room_help_text"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/bath_help_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="@string/bath_help_text"
+        android:textAlignment="textEnd"
+        app:layout_constraintTop_toBottomOf="@id/room_help_text"
         app:layout_constraintBottom_toTopOf="@id/media_RV"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/bath_text"/>
+
+    <TextView
+        android:id="@+id/bath_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".6"
+        app:layout_constraintTop_toTopOf="@id/bath_help_text"
+        app:layout_constraintBottom_toBottomOf="@id/bath_help_text"
+        app:layout_constraintStart_toEndOf="@id/bath_help_text"
         app:layout_constraintEnd_toEndOf="parent"/>
 
 
