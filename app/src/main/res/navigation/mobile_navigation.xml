@@ -12,7 +12,7 @@
             android:id="@+id/my_posts"
             android:name="com.example.bazaar.ui.myPosts.MyPostsFragment"
             android:label="@string/title_my_posts"
-            tools:layout="@layout/fragment_my_posts">
+            tools:layout="@layout/fragment_search_results">
             <action
                 android:id="@+id/my_posts_to_one_post"
                 app:destination="@+id/one_post_for_my_post"
@@ -23,6 +23,12 @@
             android:name="com.example.bazaar.ui.myPosts.OnePost.OnePostFragment"
             android:label="@string/title_one_post"
             tools:layout="@layout/fragment_one_post" />
+
+        <fragment
+            android:id="@+id/edit_post_from_one_post"
+            android:name="com.example.bazaar.ui.myPosts.EditPost.EditPostFragment"
+            android:label="@string/title_edit_post"
+            tools:layout="@layout/fragment_create_post" />
     </navigation>
 
     <navigation

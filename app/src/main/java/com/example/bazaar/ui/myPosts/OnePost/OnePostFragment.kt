@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.bazaar.Model.UserPost
 import com.example.bazaar.R
@@ -78,6 +79,14 @@ class OnePostFragment: Fragment() {
 
         binding.phoneText.setOnClickListener {
             composeMmsMessage(currUserPost)
+        }
+
+        binding.editButton.setOnClickListener {
+            findNavController().navigate(R.id.edit_post_from_one_post)
+        }
+        binding.deleteButton.setOnClickListener {
+            viewModel.deleteUserPost()
+            findNavController().popBackStack()
         }
 
         mediaAdapterOnePost = OnePostMediaAdapter(viewModel)

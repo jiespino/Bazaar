@@ -13,6 +13,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.bazaar.FireBaseAuth.AuthInit
 import com.example.bazaar.FireBaseAuth.FirestoreAuthLiveData
 import com.example.bazaar.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
         // Initialize firestore assets
         AuthInit(firebaseAuthLiveData, signInLauncher)
     }
@@ -55,4 +57,6 @@ class MainActivity : AppCompatActivity() {
             Log.d("MainActivity", "sign in failed ${result}")
         }
     }
+
+
 }

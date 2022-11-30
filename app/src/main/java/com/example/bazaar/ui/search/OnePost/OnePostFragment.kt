@@ -75,6 +75,9 @@ class OnePostFragment: Fragment() {
             binding.bathText.visibility = View.GONE
         }
 
+        binding.editButton.visibility = View.GONE
+        binding.deleteButton.visibility = View.GONE
+
         mediaAdapterOnePost = OnePostMediaAdapter(viewModel)
 
         binding.mediaRV.layoutManager =

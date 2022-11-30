@@ -48,6 +48,8 @@ class SearchResultsFragment: Fragment() {
         }
         initSwipeLayout(binding.swipeRefreshLayout)
 
+        binding.logOutButton.visibility = View.GONE
+
         val root: View = binding.root
         return root
     }

@@ -165,7 +165,7 @@ class CreatePostViewModel : ViewModel() {
             pictureUUIDs = pictureUUIDs
             // database sets firestoreID
         )
-        dbHelp.createUserPost(userPost, currentLocation.value!!, chosenCategory.value!!)
+        dbHelp.createUserPost(userPost)
     }
 
     fun deleteImages(savedPictureUUIDs: List<String>) {

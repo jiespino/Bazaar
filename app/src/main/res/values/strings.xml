@@ -10,6 +10,7 @@
     <string name="title_search">Search</string>
     <string name="title_search_results">Search Results</string>
     <string name="title_one_post">One Post</string>
+    <string name="title_edit_post">Edit Post</string>
 
     <string name="title_post">Create a Post</string>
     <string name="bottom_title_post">Create</string>
@@ -38,6 +39,9 @@
     <string name="room_help_text">Rooms:</string>
     <string name="bath_help_text">Baths:</string>
 
+    <string name="edit_button_text">Edit</string>
+    <string name="delete_button_text">Delete</string>
     <string name="cancel_button_text">Cancel</string>
     <string name="save_button_text">Save</string>
+    <string name="log_out_button_text">Log Out</string>
 </resources>

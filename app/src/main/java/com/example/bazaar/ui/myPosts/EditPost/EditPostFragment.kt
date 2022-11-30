@@ -1,4 +1,4 @@
-package com.example.bazaar.ui.createPost
+package com.example.bazaar.ui.myPosts.EditPost
 
 import android.app.Activity
 import android.content.Intent
@@ -22,12 +22,14 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.bazaar.Model.AptInfo
 import com.example.bazaar.R
 import com.example.bazaar.databinding.FragmentCreatePostBinding
+import com.example.bazaar.ui.createPost.Category
+import com.example.bazaar.ui.createPost.MediaAdapter
+import com.example.bazaar.ui.myPosts.MyPostsViewModel
 import java.io.File
 import java.io.IOException
 import java.util.*
 
-
-class CreatePostFragment : Fragment() {
+class EditPostFragment : Fragment() {
 
     companion object {
         private val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
@@ -40,10 +42,9 @@ class CreatePostFragment : Fragment() {
 
     }
     private var _binding: FragmentCreatePostBinding? = null
-    private val viewModel: CreatePostViewModel by activityViewModels()
+    private val viewModel: MyPostsViewModel by activityViewModels()
     private lateinit var pictureUUIDs: List<String>
     private lateinit var mediaAdapter: MediaAdapter
-    private var postSaved: Boolean = false
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -84,22 +85,33 @@ class CreatePostFragment : Fragment() {
 
         viewModel.setNewMediaIntent(::getNewMediaIntent)
         viewModel.setExistingMediaIntent(::getExistingMediaIntent)
-        pictureUUIDs = listOf()
 
-        if (viewModel.getCategory() != Category.APARTMENT) {
+        val currUserPost = viewModel.getCurrentUserPost()
+
+        pictureUUIDs = currUserPost.pictureUUIDs
+
+
+        binding.titleEditText.setText(currUserPost.title)
+        binding.descriptionEditText.setText(currUserPost.description)
+        binding.phoneNumberEditText.setText(currUserPost.phoneNumber)
+        binding.priceEditText.setText(currUserPost.price.toString())
+
+        val city = currUserPost.city
+        val state = currUserPost.state
+        val countryCode = currUserPost.countryCode
+        binding.locationText.text = "$city $state, $countryCode"
+
+
+        if (Category.valueOf(currUserPost.category) != Category.APARTMENT) {
             hideAptLayout()
+        } else {
+            binding.sqFeetEditText.setText(currUserPost.aptInfo?.squareFeet.toString())
+            binding.roomsEditText.setText(currUserPost.aptInfo?.rooms.toString())
+            binding.bathsEditText.setText( currUserPost.aptInfo?.baths.toString())
         }
 
         val phoneNumEditText = binding.phoneNumberEditText
         phoneNumEditText.addTextChangedListener(PhoneNumberFormattingTextWatcher())
-
-        val currLocation = viewModel.getLocation()
-        val city = currLocation[0]
-        val state = currLocation[1]
-        val countryCode = currLocation[2]
-        binding.locationText.text = "$city $state, $countryCode"
-        binding.categoryText.text = viewModel.getCategory().toString().lowercase()
-            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
 
         val mediaAttachButton = binding.mediaAttachButton
 
@@ -118,13 +130,10 @@ class CreatePostFragment : Fragment() {
         mediaAdapter = MediaAdapter { pictureUUIDPosition ->
             Log.d(javaClass.simpleName, "pictureUUIDs del $pictureUUIDPosition")
             val shorterList = pictureUUIDs.toMutableList()
-            val currentPictureUUID = shorterList[pictureUUIDPosition]
-            viewModel.deleteImage(currentPictureUUID)
             shorterList.removeAt(pictureUUIDPosition)
             pictureUUIDs = shorterList
             mediaAdapter.submitList(pictureUUIDs)
         }
-
         binding.mediaRV.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         binding.mediaRV.adapter = mediaAdapter
@@ -144,17 +153,12 @@ class CreatePostFragment : Fragment() {
         val saveButton = binding.saveButton
         saveButton.setOnClickListener {
             savePostInfo()
-            postSaved = true
         }
 
         return root
     }
 
     override fun onDestroyView() {
-
-        if (!postSaved) {
-            viewModel.deleteImages(pictureUUIDs)
-        }
 
         super.onDestroyView()
         _binding = null
@@ -198,9 +202,7 @@ class CreatePostFragment : Fragment() {
         val isBadInput = validationInfo[0] as Boolean
         val errMsg = validationInfo[1] as String
 
-
-
-       if (isBadInput) {
+        if (isBadInput) {
             Toast.makeText(activity,
                 errMsg,
                 Toast.LENGTH_LONG).show()
@@ -209,7 +211,7 @@ class CreatePostFragment : Fragment() {
             Log.d(javaClass.simpleName, "create post len ${pictureUUIDs.size} pos")
 
             val aptInfo: AptInfo?
-            if (viewModel.getCategory() == Category.APARTMENT) {
+            if (Category.valueOf(viewModel.getCurrentUserPost().category) == Category.APARTMENT) {
                 aptInfo = AptInfo(
                     squareFeet = squareFeet.toInt(),
                     rooms = rooms.toInt(),
@@ -219,8 +221,16 @@ class CreatePostFragment : Fragment() {
                 aptInfo = null
             }
 
-            val postInfo = listOf(titleText, descriptionText, priceText, phoneNumberText)
-            viewModel.createUserPost(postInfo, aptInfo, pictureUUIDs)
+            val userPost = viewModel.getCurrentUserPost()
+
+            userPost.title = titleText
+            userPost.description = descriptionText
+            userPost.price = priceText.toInt()
+            userPost.phoneNumber = phoneNumberText
+            userPost.aptInfo = aptInfo
+            userPost.pictureUUIDs = pictureUUIDs
+
+            viewModel.updateUserPost(userPost)
             findNavController().popBackStack()
         }
     }
@@ -312,7 +322,7 @@ class CreatePostFragment : Fragment() {
 
         }
 
-        if (viewModel.getCategory() != Category.APARTMENT) {
+        if  (Category.valueOf(viewModel.getCurrentUserPost().category) != Category.APARTMENT) {
             return listOf(false, errorMessage)
         }
 
