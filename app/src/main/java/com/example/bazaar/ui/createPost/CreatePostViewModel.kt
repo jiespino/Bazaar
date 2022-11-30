@@ -20,6 +20,7 @@ class CreatePostViewModel : ViewModel() {
     private var chosenCategory = MutableLiveData<Category>()
 
     private var firebaseAuthLiveData = FirestoreAuthLiveData()
+    var uploadingPhoto : MutableLiveData<Boolean> = MutableLiveData(false)
     // Database access
     private val dbHelp = DBHelper()
 
@@ -86,6 +87,8 @@ class CreatePostViewModel : ViewModel() {
     // Send intent to take picture
     fun getExistingMedia(uuid: String, _mediaSuccess: (String) -> Unit) {
         mediaSuccess = _mediaSuccess
+        uploadingPhoto.value = true
+
         getExistingMediaIntent()
         // Have to remember this in the view model because
         // MainActivity can't remember it without savedInstanceState
@@ -98,7 +101,7 @@ class CreatePostViewModel : ViewModel() {
     // Send intent to take picture
     fun getNewMedia(uuid: String, intentType: String, _mediaSuccess: (String) -> Unit) {
         mediaSuccess = _mediaSuccess
-
+        uploadingPhoto.value = true
         takeNewMediaIntent(uuid, intentType)
         // Have to remember this in the view model because
         // MainActivity can't remember it without savedInstanceState
@@ -106,12 +109,13 @@ class CreatePostViewModel : ViewModel() {
         pictureUUID = uuid
     }
 
-    fun getMediaSuccess(mediaUri: Uri) {
+    fun getExistMediaSuccess(mediaUri: Uri) {
 
         storage.uploadUserSelectedMedia(mediaUri, pictureUUID) {
             mediaSuccess(pictureUUID)
             mediaSuccess = ::defaultPhoto
             pictureUUID = ""
+            uploadingPhoto.value = false
         }
     }
 
@@ -121,7 +125,7 @@ class CreatePostViewModel : ViewModel() {
         pictureUUID = ""
     }
 
-    fun takeMediaSuccess() {
+    fun takeNewMediaSuccess() {
 
         val mediaFile = CreatePostFragment.localMediaFile(pictureUUID)
         // Wait until photo is successfully uploaded before calling back
@@ -129,6 +133,7 @@ class CreatePostViewModel : ViewModel() {
             mediaSuccess(pictureUUID)
             mediaSuccess = ::defaultPhoto
             pictureUUID = ""
+            uploadingPhoto.value = false
         }
     }
     fun takeMediaFailure() {

@@ -74,20 +74,6 @@ class Storage {
                 Log.d(javaClass.simpleName, "Delete FAILED of $pictureUUID")
             }
     }
-    fun listAllImages(listSuccess:(List<String>)->Unit) {
-        // https://firebase.google.com/docs/storage/android/list-files#list_all_files
-        photoStorage.listAll()
-            .addOnSuccessListener { listResult ->
-                Log.d(javaClass.simpleName, "listAllImages len: ${listResult.items.size}")
-                val pictureUUIDs = listResult.items.map {
-                    it.name
-                }
-                listSuccess(pictureUUIDs)
-            }
-            .addOnFailureListener {
-                Log.d(javaClass.simpleName, "listAllImages FAILED")
-            }
-    }
     fun uuid2StorageReference(pictureUUID: String): StorageReference {
         return photoStorage.child(pictureUUID)
     }

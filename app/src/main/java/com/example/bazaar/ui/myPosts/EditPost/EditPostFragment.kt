@@ -116,6 +116,13 @@ class EditPostFragment : Fragment() {
         val mediaAttachButton = binding.mediaAttachButton
 
         mediaAttachButton.setOnClickListener {
+            if (viewModel.uploadingPhoto.value!!) {
+                Toast.makeText(activity,
+                    "Still uploading previous photo!",
+                    Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
             val uuid = UUID.randomUUID().toString()
             viewModel.getExistingMedia(uuid) {
                 pictureUUIDs.toMutableList().apply{
@@ -141,6 +148,12 @@ class EditPostFragment : Fragment() {
 
         val photoCreateButton = binding.photoCreateButton
         photoCreateButton.setOnClickListener {
+            if (viewModel.uploadingPhoto.value!!) {
+                Toast.makeText(activity,
+                    "Still uploading previous photo!",
+                    Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
             getNewMedia()
         }
 

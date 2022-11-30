@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.createPost.CreatePostFragment"
-    android:scrollbars="vertical" >
+    tools:context=".ui.createPost.CreatePostFragment">
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/location_text"
@@ -80,7 +88,6 @@
         android:textAlignment="center"
         android:textSize="20sp"
         android:maxLines="5"
-        android:lines="3"
         android:nextFocusForward="@id/phone_number_edit_text"
         app:layout_constraintWidth_default="percent"
         app:layout_constraintWidth_percent=".7"
@@ -254,12 +261,13 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/media_RV"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/photo_create_button"
         app:layout_constraintBottom_toTopOf="@id/save_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
+
     <Button
         android:id="@+id/cancel_button"
         android:layout_width="wrap_content"
@@ -279,3 +287,6 @@
         app:layout_constraintStart_toEndOf="@id/cancel_button"
         app:layout_constraintEnd_toEndOf="parent"></Button>
 </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

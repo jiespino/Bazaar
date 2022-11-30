@@ -22,10 +22,15 @@
             android:id="@+id/one_post_for_my_post"
             android:name="com.example.bazaar.ui.myPosts.OnePost.OnePostFragment"
             android:label="@string/title_one_post"
-            tools:layout="@layout/fragment_one_post" />
+            tools:layout="@layout/fragment_one_post">
+            <action
+                android:id="@+id/edit_post_from_one_post"
+                app:destination="@+id/edit_post"
+                />
+        </fragment>
 
         <fragment
-            android:id="@+id/edit_post_from_one_post"
+            android:id="@+id/edit_post"
             android:name="com.example.bazaar.ui.myPosts.EditPost.EditPostFragment"
             android:label="@string/title_edit_post"
             tools:layout="@layout/fragment_create_post" />

@@ -25,13 +25,13 @@ class MediaAdapter(private val deletePos:((Int)->Unit)? = null) :
     inner class VH(view: View) :
         RecyclerView.ViewHolder(view) {
         private var photoIB: ImageButton = view.findViewById(R.id.mediaIB)
-        fun bind(pictureUUID: String, position: Int) {
+        fun bind(pictureUUID: String) {
             SearchResultsViewModel.glideFetch(pictureUUID, photoIB)
             if(deletePos == null ) {
                 photoIB.isLongClickable = false
             } else {
                 photoIB.setOnLongClickListener {
-                    deletePos.invoke(position)
+                    deletePos.invoke(adapterPosition)
                     return@setOnLongClickListener true
                 }
             }
@@ -45,6 +45,6 @@ class MediaAdapter(private val deletePos:((Int)->Unit)? = null) :
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        holder.bind(currentList[position], position)
+        holder.bind(currentList[holder.adapterPosition])
     }
 }

@@ -56,7 +56,7 @@ class CreatePostFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val uri = result.data?.data!!
 
-                viewModel.getMediaSuccess(uri)
+                viewModel.getExistMediaSuccess(uri)
                 Log.d(javaClass.simpleName, "result ok")
             } else {
                 viewModel.getMediaFailure()
@@ -67,7 +67,7 @@ class CreatePostFragment : Fragment() {
     private val newMediaLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            viewModel.takeMediaSuccess()
+            viewModel.takeNewMediaSuccess()
         } else {
             viewModel.takeMediaFailure()
         }
@@ -104,6 +104,13 @@ class CreatePostFragment : Fragment() {
         val mediaAttachButton = binding.mediaAttachButton
 
         mediaAttachButton.setOnClickListener {
+
+            if (viewModel.uploadingPhoto.value!!) {
+                Toast.makeText(activity,
+                    "Still uploading previous photo!",
+                    Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
             val uuid = UUID.randomUUID().toString()
             viewModel.getExistingMedia(uuid) {
                 pictureUUIDs.toMutableList().apply{
@@ -123,6 +130,7 @@ class CreatePostFragment : Fragment() {
             shorterList.removeAt(pictureUUIDPosition)
             pictureUUIDs = shorterList
             mediaAdapter.submitList(pictureUUIDs)
+
         }
 
         binding.mediaRV.layoutManager =
@@ -132,6 +140,13 @@ class CreatePostFragment : Fragment() {
 
         val photoCreateButton = binding.photoCreateButton
         photoCreateButton.setOnClickListener {
+
+            if (viewModel.uploadingPhoto.value!!) {
+                Toast.makeText(activity,
+                    "Still uploading previous photo!",
+                    Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
             getNewMedia()
         }
 

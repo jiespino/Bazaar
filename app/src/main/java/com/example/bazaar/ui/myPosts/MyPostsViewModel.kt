@@ -25,6 +25,8 @@ class MyPostsViewModel : ViewModel() {
     // Database access
     private val dbHelp = DBHelper()
     var fetchDone : MutableLiveData<Boolean> = MutableLiveData(false)
+    var deletingPhoto : MutableLiveData<Boolean> = MutableLiveData(false)
+    var uploadingPhoto : MutableLiveData<Boolean> = MutableLiveData(false)
 
 
     init {
@@ -101,6 +103,7 @@ class MyPostsViewModel : ViewModel() {
     // Send intent to take picture
     fun getExistingMedia(uuid: String, _mediaSuccess: (String) -> Unit) {
         mediaSuccess = _mediaSuccess
+        uploadingPhoto.value = true
         getExistingMediaIntent()
         // Have to remember this in the view model because
         // MainActivity can't remember it without savedInstanceState
@@ -113,7 +116,7 @@ class MyPostsViewModel : ViewModel() {
     // Send intent to take picture
     fun getNewMedia(uuid: String, intentType: String, _mediaSuccess: (String) -> Unit) {
         mediaSuccess = _mediaSuccess
-
+        uploadingPhoto.value = true
         takeNewMediaIntent(uuid, intentType)
         // Have to remember this in the view model because
         // MainActivity can't remember it without savedInstanceState
@@ -127,6 +130,7 @@ class MyPostsViewModel : ViewModel() {
             mediaSuccess(pictureUUID)
             mediaSuccess = ::defaultPhoto
             pictureUUID = ""
+            uploadingPhoto.value = false
         }
     }
 
@@ -144,6 +148,7 @@ class MyPostsViewModel : ViewModel() {
             mediaSuccess(pictureUUID)
             mediaSuccess = ::defaultPhoto
             pictureUUID = ""
+            uploadingPhoto.value = false
         }
     }
     fun takeMediaFailure() {
@@ -168,5 +173,6 @@ class MyPostsViewModel : ViewModel() {
 
     fun deleteImage(pictureUUID: String) {
         storage.deleteImage(pictureUUID)
+
     }
 }
