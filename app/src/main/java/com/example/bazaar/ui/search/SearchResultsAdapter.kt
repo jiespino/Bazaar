@@ -73,6 +73,10 @@ class SearchResultsAdapter(private val viewModel: SearchResultsViewModel, privat
                 val bathHelpText = context.getString(R.string.bath_help_text)
                 val bathText = currUserPost.aptInfo?.baths.toString()
                 searchRowBinding.postBaths.text = "$bathHelpText $bathText"
+            } else {
+                searchRowBinding.postSquareFeet.visibility = View.GONE
+                searchRowBinding.postRooms.visibility = View.GONE
+                searchRowBinding.postBaths.visibility = View.GONE
             }
 
             val priceHelpText = context.getString(R.string.price_help_text)

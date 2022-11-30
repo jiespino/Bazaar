@@ -3,6 +3,7 @@ package com.example.bazaar.ui.myPosts
 import android.content.res.Resources
 import android.provider.Settings.System.getString
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.fragment.app.FragmentManager
@@ -69,6 +70,10 @@ class MyPostsAdapter(private val viewModel: MyPostsViewModel, private val fragMa
                 val bathHelpText = context.getString(R.string.bath_help_text)
                 val bathText = currUserPost.aptInfo?.baths.toString()
                 searchRowBinding.postBaths.text = "$bathHelpText $bathText"
+            } else {
+                searchRowBinding.postSquareFeet.visibility = View.GONE
+                searchRowBinding.postRooms.visibility = View.GONE
+                searchRowBinding.postBaths.visibility = View.GONE
             }
 
             val priceHelpText = context.getString(R.string.price_help_text)

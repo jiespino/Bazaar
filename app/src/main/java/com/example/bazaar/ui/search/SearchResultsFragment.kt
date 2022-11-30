@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.bazaar.R
 import com.example.bazaar.databinding.FragmentSearchResultsBinding
 
 
@@ -17,7 +18,6 @@ class SearchResultsFragment: Fragment() {
 
     private var _binding: FragmentSearchResultsBinding? = null
     private val viewModel: SearchResultsViewModel by activityViewModels()
-    var fetchDone : MutableLiveData<Boolean> = MutableLiveData(false)
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -37,6 +37,12 @@ class SearchResultsFragment: Fragment() {
         binding.searchResultsRV.layoutManager = LinearLayoutManager(context)
         binding.searchResultsRV.adapter = searchResultsAdapter
         viewModel.observeUserPosts().observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                binding.noResults.visibility = View.VISIBLE
+                binding.noResults.text = getString(R.string.no_results_text)
+            } else {
+                binding.noResults.visibility = View.GONE
+            }
             Log.d(javaClass.simpleName, "postList observe len ${it.size}")
             searchResultsAdapter.submitList(it)
         }

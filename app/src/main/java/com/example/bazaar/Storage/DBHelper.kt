@@ -19,8 +19,8 @@ class DBHelper() {
         return string.substring(0..9) + "..."
     }
 
-    fun fetchPostsForSearch(location: List<String>, chosenCategory: Category, postsList: MutableLiveData<List<UserPost>>) {
-        dbFetchPostsForSearch(location, chosenCategory, postsList)
+    fun fetchPostsForSearch(location: List<String>, chosenCategory: Category, searchCriteria: List<Any>, postsList: MutableLiveData<List<UserPost>>) {
+        dbFetchPostsForSearch(location, chosenCategory, searchCriteria, postsList)
     }
 
     fun fetchInitialUserPosts(userUid: String, userPostsList: MutableLiveData<List<UserPost>>) {
@@ -34,7 +34,7 @@ class DBHelper() {
     // .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
     // But be careful about how listener updates live data
     // and noteListener?.remove() in onCleared
-    private fun dbFetchPostsForSearch(location: List<String>, category: Category, userPostList: MutableLiveData<List<UserPost>>) {
+    private fun dbFetchPostsForSearch(location: List<String>, category: Category, searchCriteria: List<Any>, userPostList: MutableLiveData<List<UserPost>>) {
         db.collection(collectionRootAllPosts)
             .document(location.joinToString(","))
             .collection(category.toString())
@@ -50,7 +50,7 @@ class DBHelper() {
 
                 result.documents.mapNotNull {
                     val userPost = it.toObject(UserPost::class.java)
-                    if (meetsFilterCriteria(userPost!!)) {
+                    if (meetsFilterCriteria(category, searchCriteria, userPost!!)) {
                         totalUserPosts.add(userPost)
                     }
                 }
@@ -168,7 +168,52 @@ class DBHelper() {
             }
     }
 
-    private fun meetsFilterCriteria(userPost: UserPost): Boolean {
+    private fun meetsFilterCriteria(category: Category, searchCriteria: List<Any>, userPost: UserPost): Boolean {
+
+        val searchTerm = searchCriteria[0] as String
+
+        if (searchTerm.isNotEmpty()) {
+            if (!userPost.title.contains(searchTerm, ignoreCase = true) && !userPost.description.contains(searchTerm, ignoreCase = true)) {
+                return false
+            }
+        }
+
+        val priceRange = searchCriteria[1] as List<Float>
+        if (valueNotInRange(userPost.price, priceRange)) {
+            return false
+        }
+
+        if (category == Category.APARTMENT) {
+            val aptCriteria = searchCriteria[2] as List<*>
+
+            val sqFtRange = aptCriteria[0] as List<Float>
+            if (valueNotInRange(userPost.aptInfo?.squareFeet!!, sqFtRange)) {
+                return false
+            }
+
+            val roomRange = aptCriteria[1] as List<Float>
+            if (valueNotInRange(userPost.aptInfo?.rooms!!, roomRange)) {
+                return false
+            }
+
+            val bathRange = aptCriteria[2] as List<Float>
+            if (valueNotInRange(userPost.aptInfo?.baths!!, bathRange)) {
+                return false
+            }
+
+        }
         return true
     }
+
+    private fun valueNotInRange(value: Int, range: List<Float>): Boolean {
+        val rangeMin = range[0]
+        val rangeMax = range[1]
+
+        if (value < rangeMin || value > rangeMax) {
+            return true
+        }
+
+        return false
+    }
+
 }

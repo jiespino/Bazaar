@@ -34,8 +34,13 @@ class MyPostsFragment: Fragment() {
         binding.searchResultsRV.layoutManager = LinearLayoutManager(context)
         binding.searchResultsRV.adapter = searchResultsAdapter
         viewModel.observeUserPosts().observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                binding.noResults.visibility = View.VISIBLE
+                binding.noResults.text = getString(R.string.no_results_text)
+            } else {
+                binding.noResults.visibility = View.GONE
+            }
             Log.d(javaClass.simpleName, "noteList observe len ${it.size}")
-            //toggleEmptyNotes()
             searchResultsAdapter.submitList(it)
         }
 

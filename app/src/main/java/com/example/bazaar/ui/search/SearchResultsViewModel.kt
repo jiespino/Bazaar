@@ -19,8 +19,7 @@ import kotlinx.coroutines.launch
 class SearchResultsViewModel : ViewModel() {
     private var userPostsList = MutableLiveData<List<UserPost>>()
     private var currentLocation = MutableLiveData<List<String>>()
-    private var currentPriceRange = MutableLiveData<List<Float>>()
-    private var currentSearchText = MutableLiveData<String>()
+    private var currentSearchCriteria = MutableLiveData<List<Any>>()
     private var chosenCategory = MutableLiveData<Category>()
     private var currentUserPost = MutableLiveData<UserPost>()
     // Database access
@@ -33,7 +32,7 @@ class SearchResultsViewModel : ViewModel() {
         viewModelScope.launch (viewModelScope.coroutineContext
                 + Dispatchers.IO)
         {
-            dbHelp.fetchPostsForSearch(currentLocation.value!!, chosenCategory.value!!, userPostsList)
+            dbHelp.fetchPostsForSearch(currentLocation.value!!, chosenCategory.value!!, currentSearchCriteria.value!!, userPostsList)
             fetchDone.postValue(true)
         }
     }
@@ -46,12 +45,9 @@ class SearchResultsViewModel : ViewModel() {
         chosenCategory.value = category
     }
 
-    fun setPriceRange(priceRange: List<Float>) {
-        currentPriceRange.value = priceRange
-    }
 
-    fun setSearchText(searchText: String) {
-        currentSearchText.value = searchText
+    fun setSearchCriteria(searchCriteria: List<Any>) {
+        currentSearchCriteria.value = searchCriteria
     }
 
     fun setUserPost(userPost: UserPost) {
@@ -65,6 +61,7 @@ class SearchResultsViewModel : ViewModel() {
     fun observeUserPosts(): LiveData<List<UserPost>> {
         return userPostsList
     }
+
 
     companion object {
         private val storage = Storage()
