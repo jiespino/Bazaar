@@ -42,7 +42,6 @@ class DBHelper() {
                 Log.d(javaClass.simpleName, "all user posts  fetch ${result!!.documents.size}")
                 // NB: This is done on a background thread
 
-                Log.e("XXX", result.documents.toString())
                 val totalUserPosts = mutableListOf<UserPost>()
 
                 result.documents.mapNotNull {
@@ -62,7 +61,7 @@ class DBHelper() {
     private fun dbFetchUserPosts(userUid: String, userPostList: MutableLiveData<List<UserPost>>) {
         db.collection(collectionRootBazaarPosts)
             .orderBy("timeStamp", Query.Direction.DESCENDING)
-            .limit(1000)
+            .limit(10000)
             .get()
             .addOnSuccessListener { result ->
                 Log.d(javaClass.simpleName, "all user posts  fetch ${result!!.documents.size}")
