@@ -86,7 +86,7 @@ class OnePostFragment: Fragment() {
         mediaAdapterOnePost = OnePostMediaAdapter(viewModel)
 
         binding.mediaRV.layoutManager =
-            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         binding.mediaRV.adapter = mediaAdapterOnePost
         mediaAdapterOnePost.submitList(pictureUUIDs)
 

@@ -126,7 +126,7 @@ class CreatePostFragment : Fragment() {
         mediaAdapter = MediaAdapter(::deletePos, ::launchImagePager)
 
         binding.mediaRV.layoutManager =
-            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         binding.mediaRV.adapter = mediaAdapter
         mediaAdapter.submitList(pictureUUIDs)
 
@@ -248,7 +248,6 @@ class CreatePostFragment : Fragment() {
     private fun getExistingMediaIntent() {
         Intent(Intent.ACTION_GET_CONTENT).also { getMediaIntent ->
             getMediaIntent.type = "image/*"
-            getMediaIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             existingMediaLauncher.launch(getMediaIntent)
         }
 

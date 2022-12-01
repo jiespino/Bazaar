@@ -35,7 +35,7 @@ class MyPostsFragment: Fragment() {
     ): View {
 
         _binding = FragmentSearchResultsBinding.inflate(inflater, container, false)
-
+        viewModel.fetchUserPosts()
         val searchResultsAdapter = MyPostsAdapter(viewModel, parentFragmentManager)
         binding.searchResultsRV.layoutManager = LinearLayoutManager(context)
         binding.searchResultsRV.adapter = searchResultsAdapter
@@ -52,10 +52,16 @@ class MyPostsFragment: Fragment() {
 
         binding.logOutButton.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
+            viewModel.setCurrentUser(null)
             AuthInit(firebaseAuthLiveData, signInLauncher)
         }
 
+        viewModel.observeCurrentUser().observe(viewLifecycleOwner) {
+            viewModel.fetchUserPosts()
+        }
+
         initSwipeLayout(binding.swipeRefreshLayout)
+        AuthInit(firebaseAuthLiveData, signInLauncher)
 
         val root: View = binding.root
         return root
@@ -80,6 +86,7 @@ class MyPostsFragment: Fragment() {
         ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             firebaseAuthLiveData.updateUser()
+            viewModel.setCurrentUser(firebaseAuthLiveData.getCurrentUser()?.uid!!)
         } else {
             // Sign in failed. If response is null the user canceled the
             // sign-in flow using the back button. Otherwise check

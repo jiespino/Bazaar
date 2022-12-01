@@ -137,7 +137,7 @@ class EditPostFragment : Fragment() {
 
         mediaAdapter = MediaAdapter(::deletePos, ::launchImagePager)
         binding.mediaRV.layoutManager =
-            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         binding.mediaRV.adapter = mediaAdapter
         mediaAdapter.submitList(pictureUUIDs)
 
@@ -175,25 +175,25 @@ class EditPostFragment : Fragment() {
     // Hide fields specific to only apartments
     private fun hideAptLayout() {
         val sqFtHelpText = binding.sqFeetHelpText
-        sqFtHelpText.visibility = View.GONE
+        sqFtHelpText.visibility = View.INVISIBLE
 
         val sqFtEditText = binding.sqFeetEditText
-        sqFtEditText.visibility = View.GONE
+        sqFtEditText.visibility = View.INVISIBLE
 
         val priceHelpText = binding.priceHelpText
         priceHelpText.text = getString(R.string.price_help_text)
 
         val roomHelpText = binding.roomsHelpText
-        roomHelpText.visibility = View.GONE
+        roomHelpText.visibility = View.INVISIBLE
 
         val roomEditText = binding.roomsEditText
-        roomEditText.visibility = View.GONE
+        roomEditText.visibility = View.INVISIBLE
 
         val bathHelpText = binding.bathsHelpText
-        bathHelpText.visibility = View.GONE
+        bathHelpText.visibility = View.INVISIBLE
 
         val bathEditText = binding.bathsEditText
-        bathEditText.visibility = View.GONE
+        bathEditText.visibility = View.INVISIBLE
     }
 
 
@@ -258,7 +258,6 @@ class EditPostFragment : Fragment() {
     private fun getExistingMediaIntent() {
         Intent(Intent.ACTION_GET_CONTENT).also { getMediaIntent ->
             getMediaIntent.type = "image/*"
-            getMediaIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             existingMediaLauncher.launch(getMediaIntent)
         }
 

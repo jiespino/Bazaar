@@ -34,7 +34,7 @@ class OnePostImagePagerAdapter (val context: Context, val imageList: ArrayList<S
 
         // on below line we are inflating our custom
         // layout file which we have created.
-        val itemView: View = mLayoutInflater.inflate(R.layout.photo_list_row, container, false)
+        val itemView: View = mLayoutInflater.inflate(R.layout.one_image_card, container, false)
 
         // on below line we are initializing
         // our image view with the id.

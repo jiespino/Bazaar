@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         // Initialize firestore assets
-        AuthInit(firebaseAuthLiveData, signInLauncher)
+        //AuthInit(firebaseAuthLiveData, signInLauncher)
     }
 
     private val signInLauncher = registerForActivityResult(

@@ -20,8 +20,7 @@ class MyPostsViewModel : ViewModel() {
     private var firebaseAuthLiveData = FirestoreAuthLiveData()
     private var userPostsList = MutableLiveData<List<UserPost>>()
     private var currentUserPost = MutableLiveData<UserPost>()
-    private var userUuid = firebaseAuthLiveData.getCurrentUser()?.uid
-    private var userId = MutableLiveData<String>()
+    private var currentUserUuid = MutableLiveData<String?>()
     // Database access
     private val dbHelp = DBHelper()
     var fetchDone : MutableLiveData<Boolean> = MutableLiveData(false)
@@ -56,6 +55,14 @@ class MyPostsViewModel : ViewModel() {
 
     fun observeUserPosts(): LiveData<List<UserPost>> {
         return userPostsList
+    }
+
+    fun setCurrentUser(userUuid: String?) {
+        currentUserUuid.value = userUuid
+    }
+
+    fun observeCurrentUser(): LiveData<String?> {
+        return currentUserUuid
     }
 
     // Media section
@@ -163,12 +170,6 @@ class MyPostsViewModel : ViewModel() {
 
     fun deleteUserPost() {
         dbHelp.deleteUserPost(currentUserPost.value!!, userPostsList)
-    }
-
-    fun deleteImages(savedPictureUUIDs: List<String>) {
-        savedPictureUUIDs.forEach {
-            deleteImage(it)
-        }
     }
 
     fun deleteImage(pictureUUID: String) {
