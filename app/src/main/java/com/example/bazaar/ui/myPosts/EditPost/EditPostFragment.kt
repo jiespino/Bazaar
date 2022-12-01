@@ -25,6 +25,7 @@ import com.example.bazaar.databinding.FragmentCreatePostBinding
 import com.example.bazaar.ui.createPost.Category
 import com.example.bazaar.ui.createPost.MediaAdapter
 import com.example.bazaar.ui.myPosts.MyPostsViewModel
+import com.example.bazaar.ui.search.SearchResultsViewModel
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -134,15 +135,9 @@ class EditPostFragment : Fragment() {
             }
         }
 
-        mediaAdapter = MediaAdapter { pictureUUIDPosition ->
-            Log.d(javaClass.simpleName, "pictureUUIDs del $pictureUUIDPosition")
-            val shorterList = pictureUUIDs.toMutableList()
-            shorterList.removeAt(pictureUUIDPosition)
-            pictureUUIDs = shorterList
-            mediaAdapter.submitList(pictureUUIDs)
-        }
+        mediaAdapter = MediaAdapter(::deletePos, ::launchImagePager)
         binding.mediaRV.layoutManager =
-            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         binding.mediaRV.adapter = mediaAdapter
         mediaAdapter.submitList(pictureUUIDs)
 
@@ -353,6 +348,20 @@ class EditPostFragment : Fragment() {
             return listOf(true, errorMessage)
         }
         return listOf(false, errorMessage)
+    }
+
+    private fun deletePos(pictureUUIDPosition: Int) {
+        Log.d(javaClass.simpleName, "pictureUUIDs del $pictureUUIDPosition")
+        val shorterList = pictureUUIDs.toMutableList()
+        val currentPictureUUID = shorterList[pictureUUIDPosition]
+        viewModel.deleteImage(currentPictureUUID)
+        shorterList.removeAt(pictureUUIDPosition)
+        pictureUUIDs = shorterList
+        mediaAdapter.submitList(pictureUUIDs)
+    }
+
+    private fun launchImagePager(pictureUUID: String) {
+        SearchResultsViewModel.doOnePostImages(context!!, pictureUUID, pictureUUIDs)
     }
 
 }

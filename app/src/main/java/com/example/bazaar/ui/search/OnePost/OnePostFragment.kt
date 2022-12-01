@@ -58,6 +58,11 @@ class OnePostFragment: Fragment() {
             binding.phoneText.text = currUserPost.phoneNumber
         }
 
+        binding.phoneText.setTextColor(R.color.teal_700)
+        binding.phoneText.setOnClickListener {
+            composeMmsMessage(currUserPost)
+        }
+
         binding.priceText.text = currUserPost.price.toString()
 
 
@@ -81,7 +86,7 @@ class OnePostFragment: Fragment() {
         mediaAdapterOnePost = OnePostMediaAdapter(viewModel)
 
         binding.mediaRV.layoutManager =
-            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         binding.mediaRV.adapter = mediaAdapterOnePost
         mediaAdapterOnePost.submitList(pictureUUIDs)
 

@@ -77,10 +77,6 @@ class OnePostFragment: Fragment() {
             binding.bathText.visibility = View.GONE
         }
 
-        binding.phoneText.setOnClickListener {
-            composeMmsMessage(currUserPost)
-        }
-
         binding.editButton.setOnClickListener {
             findNavController().navigate(R.id.edit_post_from_one_post)
         }
@@ -92,7 +88,7 @@ class OnePostFragment: Fragment() {
         mediaAdapterOnePost = OnePostMediaAdapter(viewModel)
 
         binding.mediaRV.layoutManager =
-            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         binding.mediaRV.adapter = mediaAdapterOnePost
         mediaAdapterOnePost.submitList(pictureUUIDs)
 
@@ -103,20 +99,6 @@ class OnePostFragment: Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-
-    private fun composeMmsMessage(userPost: UserPost) {
-        val phoneNumber = userPost.phoneNumber
-        val userName = userPost.userName
-        val uri = Uri.parse("smsto:$phoneNumber")
-        val smsIntent = Intent(Intent.ACTION_SENDTO, uri)
-        smsIntent.putExtra("sms_body", "Hey $userName")
-        startActivity(smsIntent)
-
-        if (smsIntent.resolveActivity(activity!!.packageManager) != null) {
-            startActivity(smsIntent)
-        }
     }
 
 }

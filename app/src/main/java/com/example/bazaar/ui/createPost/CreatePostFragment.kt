@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.bazaar.Model.AptInfo
 import com.example.bazaar.R
 import com.example.bazaar.databinding.FragmentCreatePostBinding
+import com.example.bazaar.ui.search.SearchResultsViewModel
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -122,19 +123,10 @@ class CreatePostFragment : Fragment() {
             }
         }
 
-        mediaAdapter = MediaAdapter { pictureUUIDPosition ->
-            Log.d(javaClass.simpleName, "pictureUUIDs del $pictureUUIDPosition")
-            val shorterList = pictureUUIDs.toMutableList()
-            val currentPictureUUID = shorterList[pictureUUIDPosition]
-            viewModel.deleteImage(currentPictureUUID)
-            shorterList.removeAt(pictureUUIDPosition)
-            pictureUUIDs = shorterList
-            mediaAdapter.submitList(pictureUUIDs)
-
-        }
+        mediaAdapter = MediaAdapter(::deletePos, ::launchImagePager)
 
         binding.mediaRV.layoutManager =
-            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         binding.mediaRV.adapter = mediaAdapter
         mediaAdapter.submitList(pictureUUIDs)
 
@@ -178,25 +170,26 @@ class CreatePostFragment : Fragment() {
     // Hide fields specific to only apartments
     private fun hideAptLayout() {
         val sqFtHelpText = binding.sqFeetHelpText
-        sqFtHelpText.visibility = View.GONE
+        sqFtHelpText.visibility = View.INVISIBLE
 
         val sqFtEditText = binding.sqFeetEditText
-        sqFtEditText.visibility = View.GONE
+        sqFtEditText.visibility = View.INVISIBLE
 
         val priceHelpText = binding.priceHelpText
         priceHelpText.text = getString(R.string.price_help_text)
 
         val roomHelpText = binding.roomsHelpText
-        roomHelpText.visibility = View.GONE
+        roomHelpText.visibility = View.INVISIBLE
 
         val roomEditText = binding.roomsEditText
-        roomEditText.visibility = View.GONE
+        roomEditText.visibility = View.INVISIBLE
 
         val bathHelpText = binding.bathsHelpText
-        bathHelpText.visibility = View.GONE
+        bathHelpText.visibility = View.INVISIBLE
 
         val bathEditText = binding.bathsEditText
-        bathEditText.visibility = View.GONE
+        bathEditText.visibility = View.INVISIBLE
+
     }
 
 
@@ -345,6 +338,20 @@ class CreatePostFragment : Fragment() {
             return listOf(true, errorMessage)
         }
         return listOf(false, errorMessage)
+    }
+
+    private fun deletePos(pictureUUIDPosition: Int) {
+        Log.d(javaClass.simpleName, "pictureUUIDs del $pictureUUIDPosition")
+        val shorterList = pictureUUIDs.toMutableList()
+        val currentPictureUUID = shorterList[pictureUUIDPosition]
+        viewModel.deleteImage(currentPictureUUID)
+        shorterList.removeAt(pictureUUIDPosition)
+        pictureUUIDs = shorterList
+        mediaAdapter.submitList(pictureUUIDs)
+    }
+
+    private fun launchImagePager(pictureUUID: String) {
+        SearchResultsViewModel.doOnePostImages(context!!, pictureUUID, pictureUUIDs)
     }
 
 }

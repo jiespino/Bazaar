@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.bazaar.R
 import com.example.bazaar.ui.search.SearchResultsViewModel
 
-class MediaAdapter(private val deletePos:((Int)->Unit)? = null) :
+class MediaAdapter(private val deletePos:((Int)->Unit)? = null, private val launchImagerPager:((String)->Unit)? = null) :
     ListAdapter<String, MediaAdapter.VH>(Diff()) {
     // This class allows the adapter to compute what has changed
     class Diff : DiffUtil.ItemCallback<String>() {
@@ -35,6 +35,16 @@ class MediaAdapter(private val deletePos:((Int)->Unit)? = null) :
                     return@setOnLongClickListener true
                 }
             }
+
+            if(launchImagerPager == null ) {
+                photoIB.isClickable = false
+            } else {
+                photoIB.setOnClickListener {
+                    launchImagerPager.invoke(pictureUUID)
+                    return@setOnClickListener
+                }
+            }
+
         }
     }
 
